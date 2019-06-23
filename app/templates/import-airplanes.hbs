@@ -1,0 +1,14 @@
+{{outlet}}
+<h1>Import New Airplanes</h1>
+<button {{action 'back'}}>Back to Airplanes</button>
+{{#paper-checkbox value=allowSave onChange=(action (mut allowSave))}}
+   Allow Saving Data: {{if allowSave "Ready To Save" "Check Data First"}}
+{{/paper-checkbox}}<br><br>
+Import New Data [manufacturer,class,type,model,ident,year]:
+<button {{action 'clear'}}>Clear Data</button>
+<button {{action 'last'}}>Check Last</button>
+<br><br>
+{{textarea value=importText rows="4" cols='100'}}<br><br>
+<button {{action 'import' importText}}>Import Data </button>
+Processed Data:<br><br>
+{{textarea value=processed rows="4" cols='100'}}

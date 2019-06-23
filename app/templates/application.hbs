@@ -1,5 +1,29 @@
-{{!-- The following component displays Ember's default welcome message. --}}
-{{welcome-page}}
-{{!-- Feel free to remove this! --}}
-
+{{! without contextual components }}
+{{#paper-toolbar}}
+  {{#paper-toolbar-tools}}
+    {{#paper-button iconButton=true onClick=(action "menu")}}
+      {{paper-icon "menu"}}
+    {{/paper-button}}
+    <h1>Airplane Database (c)2019 Shahman Ver 0.03 June 23</h1>
+    <span class="flex"></span>
+    {{#paper-button raised=true onClick=(action 'goto' "airport")}}
+        Airports
+    {{/paper-button}}
+    {{#paper-button raised=true onClick=(action 'goto' "airplanes")}}
+        My Airplanes
+    {{/paper-button}}
+    {{#paper-button raised=true onClick=(action 'goto' "michairplanes")}}
+        Michigan Airplanes
+    {{/paper-button}}
+    {{#paper-button raised=true onClick=(action "new")}}
+       Import Airplanes
+    {{/paper-button}}
+    {{#paper-button iconButton=true onClick=(action "favorite")}}
+      {{paper-icon "favorite"}}
+    {{/paper-button}}
+    {{#paper-button iconButton=true onClick=(action "more")}}
+      {{paper-icon "more_vert"}}
+    {{/paper-button}}
+  {{/paper-toolbar-tools}}
+{{/paper-toolbar}}
 {{outlet}}

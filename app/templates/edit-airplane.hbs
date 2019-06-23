@@ -1,0 +1,105 @@
+{{outlet}}
+<h2> Edit Airplane data...  {{model.ident}} {{model.manufacturer}} {{model.type}}</h2>
+
+{{#if isAdmin}}
+    Admin Functions: <button {{action 'test'}}>Test</button><br><br>
+{{/if}}
+<button {{action 'back'}}>Back to Airplanes</button>
+<button {{action 'openWindow' model.ident}}>Registration</button>
+<button {{action 'prev'}}>Prev</button>
+<button {{action 'next'}}>Next</button>
+<br><br>
+
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Value</th>
+    </tr>
+
+    <tr>
+        <td>Info</td>
+        <td>
+            {{#paper-select
+                    getItems=onUserLoad
+                    placeholder="class"
+                    value=model.class
+                    onChange=(action 'save_data' "class")
+            }}
+                {{#each classList as |item|}}
+                    {{#paper-option value=item}}
+                        {{item}}
+                    {{/paper-option}}
+                {{/each}}
+            {{/paper-select}}
+            &emsp;
+            {{#paper-select
+                    getItems=onUserLoad
+                    placeholder="manufacturer"
+                    value=model.manufacturer
+                    onChange=(action 'save_data' "manufacturer")
+            }}
+                {{#each mfgList as |item|}}
+                    {{#paper-option value=item}}
+                        {{item}}
+                    {{/paper-option}}
+                {{/each}}
+            {{/paper-select}}
+            &emsp;
+            {{#paper-select
+                    getItems=onUserLoad
+                    placeholder="airport"
+                    value=model.airport
+                    onChange=(action 'save_data' "airport")
+            }}
+                {{#each airportList as |item|}}
+                    {{#paper-option value=item}}
+                        {{item}}
+                    {{/paper-option}}
+                {{/each}}
+            {{/paper-select}}
+            &emsp;
+            {{#paper-select
+                    getItems=onUserLoad
+                    placeholder="color"
+                    value=model.color
+                    onChange=(action 'save_data' "color")
+            }}
+                {{#each colorList as |item|}}
+                    {{#paper-option value=item}}
+                        {{item}}
+                    {{/paper-option}}
+                {{/each}}
+            {{/paper-select}}
+    </td>
+    </tr>
+    <tr>
+        <td>N Number:</td>
+        <td>
+            {{textarea value=model.ident rows="1" cols='10' key-up=(action 'save_data' "ident")}}
+        </td>
+    </tr>
+    <tr>
+        <td>Type:</td>
+        <td>
+            {{textarea value=model.type rows="1" cols='20' key-up=(action 'save_data' "type")}}
+        </td>
+    </tr>
+    <tr>
+        <td>Model:</td>
+        <td>
+            {{textarea value=model.model rows="1" cols='20' key-up=(action 'save_data' "model")}}
+        </td>
+    </tr>
+    <tr>
+        <td>Year</td>
+        <td>
+            {{textarea value=model.year rows="1" cols='10' key-up=(action 'save_data' "year")}}
+        </td>
+    </tr>
+    <tr>
+        <td>Comment:</td>
+        <td>
+            {{textarea value=model.comment rows="4" cols='100' key-up=(action 'save_data' "comment")}}
+        </td>
+    </tr>
+</table>

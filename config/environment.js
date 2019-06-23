@@ -4,6 +4,13 @@ module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'airplanes',
     environment,
+    firebase: {
+      apiKey: "AIzaSyCllseD_2ibwYBGsKQWWk0T1hS1HHgXTK0",
+      authDomain: "airplanes-43df3.firebaseapp.com",
+      databaseURL: "https://airplanes-43df3.firebaseio.com",
+      storageBucket: "airplanes-43df3.appspot.com",
+      messagingSenderId: "1088975274967"
+    },
     rootURL: '/',
     locationType: 'auto',
     EmberENV: {
