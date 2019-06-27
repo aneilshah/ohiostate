@@ -7,6 +7,7 @@
 <button {{action 'import'}}>Import Data</button>
 <button {{action 'newDlg'}}>Add New Airplane</button>
 <button {{action 'refresh'}}>Refresh</button>
+<button {{action 'delete'}}>Del</button>
 <!-- <button {{action 'test'}}>Test</button> -->
 &emsp;&emsp;
 {{#paper-select
@@ -102,7 +103,13 @@
     {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
         {{#paper-dialog-content}}
             <h2 class="md-title">Add New Airplane</h2>
-            {{paper-input placeholder="ident" autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+            N{{paper-input placeholder="ident" autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+            {{#paper-select
+              label='First Seen' selected=dlgYear options=yearList onChange=(action (mut dlgYear)) as |item|
+            }}
+              {{item}}
+            {{/paper-select}}
+
         {{/paper-dialog-content}}
 
         {{#paper-dialog-actions class="layout-row"}}
@@ -145,6 +152,7 @@
             <th {{action 'sort' "dateAdded"}}>Date Add</th>
             <th {{action 'sort' "airport"}}>Airport</th>
             <th {{action 'sort' "registered"}}>Registered</th>
+            <th {{action 'sort' "firstSeen"}}>First</th>
             <th {{action 'sort' "lastSeen"}}>Last</th>
             <th {{action 'sort' "color"}}>Color</th>
             <th {{action 'sort' "photo"}}>NP</th>
@@ -169,6 +177,7 @@
                 <td {{action 'editDlg' "dateAdded" data}}>{{data.dateAdded}}</td>
                 <td {{action 'editDlg' "airport" data}}>{{data.airport}}</td>
                 <td {{action 'editDlg' "registered" data}}>{{data.registered}}</td>
+                <td {{action 'editDlg' "firstSeen" data}}>{{data.firstSeen}}</td>
                 <td {{action 'editDlg' "lastSeen" data}}>{{data.lastSeen}}</td>
                 <td {{action 'editDlg' "color" data}}>{{data.color}}</td>
                 <td {{action 'togglePhoto' data}}>{{data.photo}}</td>

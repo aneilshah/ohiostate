@@ -5,7 +5,7 @@ module.exports = function(environment) {
     modulePrefix: 'airplanes',
     environment,
     firebase: {
-      apiKey: "AIzaSyCllseD_2ibwYBGsKQWWk0T1hS1HHgXTK0",
+      apiKey: process.env.API_KEY,
       authDomain: "airplanes-43df3.firebaseapp.com",
       databaseURL: "https://airplanes-43df3.firebaseio.com",
       storageBucket: "airplanes-43df3.appspot.com",
