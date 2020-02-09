@@ -79,12 +79,6 @@ export default Controller.extend({
     }),
   //--------------------------------------
   actions: {
-    success(){
-
-    },
-    error(){
-
-    },
     beech(){
       this.set('mfgFilter','Beech');
       this.set('classFilter','Single');
@@ -113,6 +107,9 @@ export default Controller.extend({
     clearIdentList(){
       this.set('filterIdent',false);
     },
+    copyToClip(plane){
+      alert(plane.get('manufacturer')+' '+plane.get('model')+' '+plane.get('ident'));
+    },
     createNew() {
       let ident='N'+this.get('dlgData');
       let firstYear=this.get('dlgYear');
@@ -129,7 +126,7 @@ export default Controller.extend({
           dateAdded: getToday(),
           firstSeen: firstYear,
           ident: ident,
-          lastSeen: '',
+          lastSeen: firstYear,
           manufacturer: '',
           model: '',
           photo: '',
@@ -217,7 +214,7 @@ export default Controller.extend({
     },
     setClass(newClass){
       this.set('classFilter',newClass);
-      if (newClass==='*NEW*'){
+      if (newClass==='*New*'){
         this.set('mfgFilter','ALL');
       }
     },
@@ -237,7 +234,7 @@ export default Controller.extend({
       alert(record.get('id'));
     },
     showNew(){
-      this.set('classFilter','*NEW*');
+      this.set('classFilter','*New*');
       this.set('mfgFilter','ALL');
     },
     sort(val){

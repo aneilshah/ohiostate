@@ -198,7 +198,7 @@ as |item|
         <td {{action 'editDlg' "class" data}}>{{data.class}}</td>
         <td oncontextmenu={{action "identToClip" data.ident}} {{action 'editDlg' "ident" data}}>{{data.ident}}</td>
         <td>
-          <button>Copy</button>
+          <button {{action 'copyToClip' data}}>Copy</button>
         </td>
         <td {{action 'editDlg' "manufacturer" data}}>{{data.manufacturer}}</td>
         <td {{action 'editDlg' "type" data}}>{{data.type}}</td>
