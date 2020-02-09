@@ -28,20 +28,31 @@ export default Controller.extend({
     'ALL','*New*','Single', 'Turbo', 'Twin', 'Learjet', 'Jet', 'Helicopter',
     'Biplane', 'Vintage', 'Military', 'Seaplane', 'Canard', 'EAA', 'Kitplane'],
   airportList: [
-    'ALL','Canton', 'Oakland', 'Ann Arbor', 'Troy', 'Detroit', 'Willow Run', 'Oakland SW','Jackson',
-    'Lansing', 'Brighton', 'Livingston','Grosse Ile','Romeo',
-    'Out of State', 'Ex Local', 'MI-Other','TBD',''],
+    '','ALL','Canton', 'Oakland', 'Ann Arbor', 'Troy', 'Detroit', 'Willow Run', 'Oakland SW','Jackson',
+    'Lansing', 'Brighton', 'Livingston','Grosse Ile','Mason Jewett','Romeo',
+    'CAP','Out of State', 'Ex Local', 'MI-Other','TBD'],
   colorList: [
     'ALL','White', 'Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple', 'Beige', 'Black',
     'White/Red', 'White/Blue', 'White/Green',
     'Other'],
+  identList:['1','2','3','4','5','6','7','8','9'],
   backyardStatus: ['','YES'],
   yearList: ['','2019','2018','2017','2016','2015','2014','2013','2012','2011',
     '2010','2009','2008','2007','2006','2005'],
   photoStatus:['','*'],
-  sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter',
+  sortList: ['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'color', 'year'],
+  filterIdent: true,
+  mfgFilter: 'Cessna',
+  airportFilter: 'ALL',
+  colorFilter: 'ALL',
+  classFilter: 'ALL',
+  identFilter: 'N1',
+  sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter','identFilter','filterIdent',
     'colorFilter', 'classFilter', function () {
       let out = this.get('model');
+      let count=0;
+      let identMatch=this.get('identFilter');
+
       if (this.get('mfgFilter') !== 'ALL') {
         out = out.filterBy('manufacturer', this.get('mfgFilter'));
       }
@@ -54,19 +65,54 @@ export default Controller.extend({
       if (this.get('colorFilter') !== 'ALL') {
         out = out.filterBy('color', this.get('colorFilter'));
       }
+      if (this.get('filterIdent')){
+        out=out.filter(item => item.get('ident').includes(identMatch));
+      }
+
       out = out.sortBy(this.get('sortBy'));
       if (this.get('reverse')) {out = out.sortBy(this.get('sortBy')).reverse();}
       else {out = out.sortBy(this.get('sortBy'));}
 
-      return out;
+      count=out.length;
+
+      return {list:out, count:count};
     }),
-  sortList: ['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'color', 'year'],
-  mfgFilter: 'ALL',
-  airportFilter: 'ALL',
-  colorFilter: 'ALL',
-  classFilter: 'ALL',
   //--------------------------------------
   actions: {
+    success(){
+
+    },
+    error(){
+
+    },
+    beech(){
+      this.set('mfgFilter','Beech');
+      this.set('classFilter','Single');
+      this.set('filterIdent',false);
+    },
+    cessna(){
+      this.set('mfgFilter','Cessna');
+      this.set('classFilter','Single');
+      this.set('filterIdent',true);
+    },
+    cirrus(){
+      this.set('mfgFilter','Cirrus');
+      this.set('classFilter','Single');
+      this.set('filterIdent',false);
+    },
+    piper(){
+      this.set('mfgFilter','Piper');
+      this.set('classFilter','Single');
+      this.set('filterIdent',true);
+    },
+    mooney(){
+      this.set('mfgFilter','Mooney');
+      this.set('classFilter','Single');
+      this.set('filterIdent',false);
+    },
+    clearIdentList(){
+      this.set('filterIdent',false);
+    },
     createNew() {
       let ident='N'+this.get('dlgData');
       let firstYear=this.get('dlgYear');
@@ -77,7 +123,6 @@ export default Controller.extend({
           id: parseInt(getLastID(this)) + 1,
           airport: '',
           backyard: false,
-          backyard17: '',
           class: '*New*',
           color: '',
           comment: '',
@@ -89,6 +134,11 @@ export default Controller.extend({
           model: '',
           photo: '',
           registered: '',
+          seenAirport: false,
+          seenAirshow: false,
+          seenBackyard: false,
+          seenMI:false,
+          seenOOS:false,
           type: '',
           year: '',
         });
@@ -126,6 +176,13 @@ export default Controller.extend({
       }
       else {alert('No airplanes deleted');}
     },
+    filterIdents(){
+      this.set('filterIdent',true);
+    },
+    identToClip(val){
+      alert(val);
+      return false;  //suppress context menu
+    },
     import(){
       this.transitionToRoute('import-airplanes');
     },
@@ -158,8 +215,30 @@ export default Controller.extend({
     scrollTo(tag){
       $(window).scrollTop(tag);
     },
+    setClass(newClass){
+      this.set('classFilter',newClass);
+      if (newClass==='*NEW*'){
+        this.set('mfgFilter','ALL');
+      }
+    },
+    setMfg(newMfg){
+      this.set('mfgFilter',newMfg);
+      if (newMfg==='ALL' || newMfg==='Cessna' || newMfg==='Piper'){
+        this.set('filterIdent','True');
+      }
+      else {
+        this.set('filterIdent',false);
+      }
+    },
+    setIdentFilter(val){
+      this.set('identFilter','N'+val);
+    },
     showID(record){
       alert(record.get('id'));
+    },
+    showNew(){
+      this.set('classFilter','*NEW*');
+      this.set('mfgFilter','ALL');
     },
     sort(val){
       if (this.get('sortBy') === val) {
@@ -293,7 +372,10 @@ export default Controller.extend({
 
         //Check for out of state
         if (this.get('selectedData')==='registered'){
-          if (this.get('dlgData').length===2){
+          if (this.get('dlgData')==='CAP'){
+            record.set('airport','CAP');
+          }
+          else if (this.get('dlgData').length===2){
             record.set('airport','Out of State');
           }
         }

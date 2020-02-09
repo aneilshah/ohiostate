@@ -97,7 +97,6 @@ export default Controller.extend({
                      id: context.get('lastID'),
                      airport: airport,
                      backyard: false,
-                     backyard17:'',
                      class: airplane_class,
                      color: color,
                      comment: comment,
@@ -109,6 +108,7 @@ export default Controller.extend({
                      model: airplane_model,
                      photo: false,
                      registered: '',
+
                      type: airplane_type,
                      year: year,
                   });

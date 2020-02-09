@@ -1,199 +1,229 @@
 {{outlet}}
 <h2>My Photographed Airplanes</h2>
 {{#if isAdmin}}
-    Admin Functions:
-    <button {{action 'toggleDelete'}}>{{if allowDelete 'Disable Delete' 'Allow Delete'}}</button>
+  Admin Functions:
+  <button {{action 'toggleDelete'}}>{{if allowDelete 'Disable Delete' 'Allow Delete'}}</button>
 {{/if}}
 <button {{action 'import'}}>Import Data</button>
 <button {{action 'newDlg'}}>Add New Airplane</button>
 <button {{action 'refresh'}}>Refresh</button>
 <button {{action 'delete'}}>Del</button>
+<button {{action 'showNew'}}>SHOW NEW</button>&emsp;
+<button {{action 'cessna'}}>CESSNA</button>
+<button {{action 'cirrus'}}>CIRRUS</button>
+<button {{action 'piper'}}>PIPER</button>
+<button {{action 'mooney'}}>MOONEY</button>
+<button {{action 'beech'}}>BEECH</button>
 <!-- <button {{action 'test'}}>Test</button> -->
 &emsp;&emsp;
-{{#paper-select
-        label="Sort by"
-        selected=sortBy
-        onChange=(action (mut sortBy))
-        options=sortList
-        as |item|
-}}
-  {{item}}
-{{/paper-select}}
-&emsp;
-    {{#paper-select
-            label="Class"
-            selected=classFilter
-            onChange=(action (mut classFilter))
-            options=classList
-            as |item|
-    }}
-      {{item}}
-    {{/paper-select}}
-&emsp;
-{{#paper-select
-        label="Manufacturer"
-        selected=mfgFilter
-        onChange=(action (mut mfgFilter))
-        options=mfgList
-        as |item|
-}}
-  {{item}}
-{{/paper-select}}
-&emsp;
-{{#paper-select
-        label="Airport"
-        selected=airportFilter
-        onChange=(action (mut airportFilter))
-        options=airportList
-        as |item|
-}}
-  {{item}}
-{{/paper-select}}
-&emsp;
-{{#paper-select
-        label="Color"
-        selected=colorFilter
-        onChange=(action (mut colorFilter))
-        options=colorList
-        as |item|
-}}
-  {{item}}
-{{/paper-select}}
 
-<br><br>
+{{#paper-select
+  label="Class"
+  selected=classFilter
+  onChange=(action 'setClass')
+  options=classList
+as |item|
+}}
+  {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select
+  label="Manufacturer"
+  selected=mfgFilter
+  onChange=(action 'setMfg')
+  options=mfgList
+as |item|
+}}
+  {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select
+  label="Airport"
+  selected=airportFilter
+  onChange=(action (mut airportFilter))
+  options=airportList
+as |item|
+}}
+  {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select
+  label="Color"
+  selected=colorFilter
+  onChange=(action (mut colorFilter))
+  options=colorList
+as |item|
+}}
+  {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select
+  label="Sort by"
+  selected=sortBy
+  onChange=(action (mut sortBy))
+  options=sortList
+as |item|
+}}
+  {{item}}
+{{/paper-select}}
+<br>
+
+{{#if filterIdent}}
+  Total Count: {{sorted.count}}&emsp;
+  <button {{action 'setIdentFilter' '1'}}>N1</button>
+  <button {{action 'setIdentFilter' '2'}}>N2</button>
+  <button {{action 'setIdentFilter' '3'}}>N3</button>
+  <button {{action 'setIdentFilter' '4'}}>N4</button>
+  <button {{action 'setIdentFilter' '5'}}>N5</button>
+  <button {{action 'setIdentFilter' '6'}}>N6</button>
+  <button {{action 'setIdentFilter' '7'}}>N7</button>
+  <button {{action 'setIdentFilter' '8'}}>N8</button>
+  <button {{action 'setIdentFilter' '9'}}>N9</button>
+  <button {{action 'clearIdentList'}}>ALL</button>
+  <br>
+{{else}}
+  Total Count: {{sorted.count}}&emsp;
+  <button {{action 'filterIdents'}}>FILTER IDENTS</button>
+  <br>
+{{/if}}
 
 {{#if (eq showDlg "EDIT")}}
-    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
-        {{#paper-dialog-content}}
-            <h2 class="md-title">Edit {{title}}</h2>
-            {{#if (eq title 'Comment')}}
-                {{textarea value=dlgData  rows="4" cols='80' onChange=(action (mut dlgData))}}
-            {{/if}}
-            {{#if (not-eq title 'Comment')}}
-                {{paper-input placeholder=title autofocus=true value=dlgData onChange=(action (mut dlgData))}}
-            {{/if}}
-        {{/paper-dialog-content}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+    {{#paper-dialog-content}}
+      <h2 class="md-title">Edit {{title}}</h2>
+      {{#if (eq title 'Comment')}}
+        {{textarea value=dlgData  rows="4" cols='80' onChange=(action (mut dlgData))}}
+      {{/if}}
+      {{#if (not-eq title 'Comment')}}
+        {{paper-input placeholder=title autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+      {{/if}}
+    {{/paper-dialog-content}}
 
-        {{#paper-dialog-actions class="layout-row"}}
-            <span class="flex"></span>
-            {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
-            {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
-        {{/paper-dialog-actions}}
-    {{/paper-dialog}}
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
+  {{/paper-dialog}}
 
 {{else if (eq showDlg "DROPDOWN")}}
-    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg")}}
-        {{#paper-dialog-content}}
-            <h2 class="md-title">Edit {{title}}</h2>
-            {{#paper-select
-                    label=title selected=dlgData options=dlgDropdown onChange=(action (mut dlgData)) as |item|
-            }}
-                {{item}}
-            {{/paper-select}}
-        {{/paper-dialog-content}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg")}}
+    {{#paper-dialog-content}}
+      <h2 class="md-title">Edit {{title}}</h2>
+      {{#paper-select
+        label=title selected=dlgData options=dlgDropdown onChange=(action (mut dlgData)) as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+    {{/paper-dialog-content}}
 
-        {{#paper-dialog-actions class="layout-row"}}
-            <span class="flex"></span>
-            {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
-            {{#paper-button primary=true onClick=(action "saveDlgData" )}}Save{{/paper-button}}
-        {{/paper-dialog-actions}}
-    {{/paper-dialog}}
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "saveDlgData" )}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
+  {{/paper-dialog}}
 
 {{else if (eq showDlg "NEW")}}
-    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
-        {{#paper-dialog-content}}
-            <h2 class="md-title">Add New Airplane</h2>
-            N{{paper-input placeholder="ident" autofocus=true value=dlgData onChange=(action (mut dlgData))}}
-            {{#paper-select
-              label='First Seen' selected=dlgYear options=yearList onChange=(action (mut dlgYear)) as |item|
-            }}
-              {{item}}
-            {{/paper-select}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+    {{#paper-dialog-content}}
+      <h2 class="md-title">Add New Airplane</h2>
+      N{{paper-input placeholder="ident" autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+      {{#paper-select
+        label='First Seen' selected=dlgYear options=yearList onChange=(action (mut dlgYear)) as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
 
-        {{/paper-dialog-content}}
+    {{/paper-dialog-content}}
 
-        {{#paper-dialog-actions class="layout-row"}}
-            <span class="flex"></span>
-            {{#paper-button primary=true onClick=(action "closeDlg" "cancel")}}Cancel{{/paper-button}}
-            {{#paper-button primary=true onClick=(action "createNew")}}Save{{/paper-button}}
-        {{/paper-dialog-actions}}
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg" "cancel")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "createNew")}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
 
-    {{/paper-dialog}}
+  {{/paper-dialog}}
 
 {{else if (eq showDlg "TEST")}}
-    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
-        {{#paper-dialog-content}}
-            <h2 class="md-title">Edit {{title}}</h2>
-            <p>Enter data here!</p>
-            {{paper-input placeholder=title autofocus=true value=dlgData onChange=(action (mut dlgData))}}
-            <div>
-                {{#paper-checkbox value=flag onChange=(action (mut flag))}}Example Checkbox{{/paper-checkbox}}
-            </div>
-        {{/paper-dialog-content}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+    {{#paper-dialog-content}}
+      <h2 class="md-title">Edit {{title}}</h2>
+      <p>Enter data here!</p>
+      {{paper-input placeholder=title autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+      <div>
+        {{#paper-checkbox value=flag onChange=(action (mut flag))}}Example Checkbox{{/paper-checkbox}}
+      </div>
+    {{/paper-dialog-content}}
 
-        {{#paper-dialog-actions class="layout-row"}}
-            <span class="flex"></span>
-            {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
-            {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
-        {{/paper-dialog-actions}}
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
 
-    {{/paper-dialog}}
+  {{/paper-dialog}}
 
 {{else if (eq showDlg "NONE")}}
-    <table>
-        <tr>
-            <th>#</th>
-            <th {{action 'sort' "class"}}>Class</th>
-            <th {{action 'sort' "ident"}}>Ident</th>
-            <th {{action 'sort' "manufacturer"}}>Mfg</th>
-            <th {{action 'sort' "type"}}>Type</th>
-            <th {{action 'sort' "model"}}>Model</th>
-            <th {{action 'sort' "year"}}>Year</th>
-            <th {{action 'sort' "dateAdded"}}>Date Add</th>
-            <th {{action 'sort' "airport"}}>Airport</th>
-            <th {{action 'sort' "registered"}}>Registered</th>
-            <th {{action 'sort' "firstSeen"}}>First</th>
-            <th {{action 'sort' "lastSeen"}}>Last</th>
-            <th {{action 'sort' "color"}}>Color</th>
-            <th {{action 'sort' "photo"}}>NP</th>
-            <th>Reg</th>
-            <th>Hist</th>
-            <th>Photo</th>
-            <th>Comment</th>
-            {{#if showDelete}}
-                <th>Delete</th>
-            {{/if}}
-        </tr>
 
-        {{#each sorted as |data index|}}
-            <tr>
-                <td {{action 'showID' data}}>{{addone index}}</td>
-                <td {{action 'editDlg' "class" data}}>{{data.class}}</td>
-                <td {{action 'editDlg' "ident" data}}>{{data.ident}}</td>
-                <td {{action 'editDlg' "manufacturer" data}}>{{data.manufacturer}}</td>
-                <td {{action 'editDlg' "type" data}}>{{data.type}}</td>
-                <td {{action 'editDlg' "model" data}}>{{data.model}}</td>
-                <td {{action 'editDlg' "year" data}}>{{data.year}}</td>
-                <td {{action 'editDlg' "dateAdded" data}}>{{data.dateAdded}}</td>
-                <td {{action 'editDlg' "airport" data}}>{{data.airport}}</td>
-                <td {{action 'editDlg' "registered" data}}>{{data.registered}}</td>
-                <td {{action 'editDlg' "firstSeen" data}}>{{data.firstSeen}}</td>
-                <td {{action 'editDlg' "lastSeen" data}}>{{data.lastSeen}}</td>
-                <td {{action 'editDlg' "color" data}}>{{data.color}}</td>
-                <td {{action 'togglePhoto' data}}>{{data.photo}}</td>
-                <td><button {{action 'openWindow' data.ident}}>Reg</button></td>
-                <td><button {{action 'openHist' data.ident}}>Hist</button></td>
-                <td><button {{action 'openPhoto' data.ident}}>Photo</button></td>
-                <td {{action 'editDlg' "comment" data}}>{{data.comment}}</td>
-                {{#if showDelete}}
-                    <td>
-                        <button {{action 'delete' data}}>Delete</button>
-                    </td>
-                {{/if}}
-            </tr>
-        {{else}}
-            ERROR: Can't find any data<br>
-        {{/each}}
+  <table>
+    <tr>
+      <th>#</th>
+      <th {{action 'sort' "class"}}>Class</th>
+      <th {{action 'sort' "ident"}}>Ident</th>
+      <th>Copy</th>
+      <th {{action 'sort' "manufacturer"}}>Mfg</th>
+      <th {{action 'sort' "type"}}>Type</th>
+      <th {{action 'sort' "model"}}>Model</th>
+      <th {{action 'sort' "year"}}>Year</th>
+      <th {{action 'sort' "dateAdded"}}>Date Add</th>
+      <th {{action 'sort' "airport"}}>Airport</th>
+      <th {{action 'sort' "registered"}}>Registered</th>
+      <th {{action 'sort' "firstSeen"}}>First</th>
+      <th {{action 'sort' "lastSeen"}}>Last</th>
+      <th {{action 'sort' "color"}}>Color</th>
+      <th {{action 'sort' "photo"}}>NP</th>
+      <th>Reg</th>
+      <th>Hist</th>
+      <th>Photo</th>
+      <th>Comment</th>
+      {{#if showDelete}}
+        <th>Delete</th>
+      {{/if}}
+    </tr>
 
-    </table>
+    {{#each sorted.list as |data index|}}
+      <tr>
+        <td {{action 'showID' data}}>{{addone index}}</td>
+        <td {{action 'editDlg' "class" data}}>{{data.class}}</td>
+        <td oncontextmenu={{action "identToClip" data.ident}} {{action 'editDlg' "ident" data}}>{{data.ident}}</td>
+        <td>
+          <button>Copy</button>
+        </td>
+        <td {{action 'editDlg' "manufacturer" data}}>{{data.manufacturer}}</td>
+        <td {{action 'editDlg' "type" data}}>{{data.type}}</td>
+        <td {{action 'editDlg' "model" data}}>{{data.model}}</td>
+        <td {{action 'editDlg' "year" data}}>{{data.year}}</td>
+        <td {{action 'editDlg' "dateAdded" data}}>{{data.dateAdded}}</td>
+        <td {{action 'editDlg' "airport" data}}>{{data.airport}}</td>
+        <td {{action 'editDlg' "registered" data}}>{{data.registered}}</td>
+        <td {{action 'editDlg' "firstSeen" data}}>{{data.firstSeen}}</td>
+        <td {{action 'editDlg' "lastSeen" data}}>{{data.lastSeen}}</td>
+        <td {{action 'editDlg' "color" data}}>{{data.color}}</td>
+        <td {{action 'togglePhoto' data}}>{{data.photo}}</td>
+        <td><button {{action 'openWindow' data.ident}}>Reg</button></td>
+        <td><button {{action 'openHist' data.ident}}>Hist</button></td>
+        <td><button {{action 'openPhoto' data.ident}}>Photo</button></td>
+        <td {{action 'editDlg' "comment" data}}>{{data.comment}}</td>
+        {{#if showDelete}}
+          <td>
+            <button {{action 'delete' data}}>Delete</button>
+          </td>
+        {{/if}}
+      </tr>
+    {{else}}
+      ERROR: Can't find any data<br>
+    {{/each}}
+
+  </table>
 {{/if}}
