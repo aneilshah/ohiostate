@@ -37,7 +37,7 @@ export default Controller.extend({
     'Other'],
   identList:['1','2','3','4','5','6','7','8','9'],
   backyardStatus: ['','YES'],
-  yearList: ['','2019','2018','2017','2016','2015','2014','2013','2012','2011',
+  yearList: ['','2021','2020','2019','2018','2017','2016','2015','2014','2013','2012','2011',
     '2010','2009','2008','2007','2006','2005'],
   photoStatus:['','*'],
   sortList: ['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'color', 'year'],
@@ -187,7 +187,7 @@ export default Controller.extend({
       this.transitionToRoute('add-airplane');
     },
     newDlg(){
-      this.set('dlgYear','2019');
+      this.set('dlgYear','2020');
       this.set('showDlg', 'NEW');
     },
     openHist(id){
@@ -336,10 +336,10 @@ export default Controller.extend({
 
       // special logic
       if (val1==='lastSeen' && (val2.get('lastSeen')==='' || val2.get('lastSeen')===null)) {
-        this.set('dlgData', '2019');
+        this.set('dlgData', '2020');
       }
       else if (val1==='firstSeen' && (val2.get('firstSeen')==='' || val2.get('firstSeen')===null)) {
-        this.set('dlgData', '2019');
+        this.set('dlgData', '2020');
       }
       else {
         this.set('dlgData', val2.get(val1));
