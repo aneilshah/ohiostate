@@ -4,11 +4,10 @@
   Admin Functions:
   <button {{action 'toggleDelete'}}>{{if allowDelete 'Disable Delete' 'Allow Delete'}}</button>
 {{/if}}
-<button {{action 'import'}}>Import Data</button>
 <button {{action 'newDlg'}}>Add New Airplane</button>
-<button {{action 'refresh'}}>Refresh</button>
 <button {{action 'delete'}}>Del</button>
-<button {{action 'showNew'}}>SHOW NEW</button>&emsp;
+<button {{action 'showNew'}}>SHOW NEW</button>
+<button {{action 'test'}}>TEST</button>&emsp;
 <button {{action 'cessna'}}>CESSNA</button>
 <button {{action 'cirrus'}}>CIRRUS</button>
 <button {{action 'piper'}}>PIPER</button>
@@ -58,10 +57,20 @@ as |item|
 {{/paper-select}}
 &emsp;
 {{#paper-select
-  label="Sort by"
-  selected=sortBy
-  onChange=(action (mut sortBy))
-  options=sortList
+  label="First Seen"
+  selected=firstSeenFilter
+  onChange=(action (mut firstSeenFilter))
+  options=yearList2
+as |item|
+}}
+  {{item}}
+{{/paper-select}}
+
+{{#paper-select
+        label="Last Seen"
+        selected=lastSeenFilter
+        onChange=(action (mut lastSeenFilter))
+        options=yearList2
 as |item|
 }}
   {{item}}
@@ -176,7 +185,7 @@ as |item|
       <th {{action 'sort' "type"}}>Type</th>
       <th {{action 'sort' "model"}}>Model</th>
       <th {{action 'sort' "year"}}>Year</th>
-      <th {{action 'sort' "dateAdded"}}>Date Add</th>
+      <th {{action 'sort' "dateAddedSort"}}>Date Add</th>
       <th {{action 'sort' "airport"}}>Airport</th>
       <th {{action 'sort' "registered"}}>Registered</th>
       <th {{action 'sort' "firstSeen"}}>First</th>
@@ -204,7 +213,7 @@ as |item|
         <td {{action 'editDlg' "type" data}}>{{data.type}}</td>
         <td {{action 'editDlg' "model" data}}>{{data.model}}</td>
         <td {{action 'editDlg' "year" data}}>{{data.year}}</td>
-        <td {{action 'editDlg' "dateAdded" data}}>{{data.dateAdded}}</td>
+        <td {{action 'editDlg' "allYears" data}}>{{data.dateAdded}}</td>
         <td {{action 'editDlg' "airport" data}}>{{data.airport}}</td>
         <td {{action 'editDlg' "registered" data}}>{{data.registered}}</td>
         <td {{action 'editDlg' "firstSeen" data}}>{{data.firstSeen}}</td>

@@ -17,17 +17,17 @@ export default Controller.extend({
    title: '',
    //-----------------------------------
    // Filtering and sorting
-   mfgList: [
+   mfgList: Object.freeze([
       'ALL','Beechcraft', 'Cessna', 'Cirrus', 'Piper', 'Mooney',
       'Aeronca', 'American', 'Boeing', 'Champion', 'Diamond','Eng  Research', 'Fairchild',
       'Funk', 'Gevalt', 'Luscombe', 'Maule','Navion', 'Taylorcraft', 'Vans',
-      'TBD'],
-   classList: [
+      'TBD']),
+   classList: Object.freeze([
       'ALL','Single', 'Turbo', 'Twin', 'Learjet', 'Jet', 'Helicopter',
-      'Biplane', 'Vintage', 'Military', 'Seaplane', 'Canard', 'EAA', 'Kitplane'],
-   airportList: [
+      'Biplane', 'Vintage', 'Military', 'Seaplane', 'Canard', 'EAA', 'Kitplane']),
+   airportList: Object.freeze([
       'ALL','Canton', 'Oakland', 'Ann Arbor', 'Troy', 'Detroit', 'Willow Run', 'Oakland SW','Jackson', 'Lansing', 'Brighton', 'Livingston',
-      'Other State', 'Ex Local', 'MI-Other','TBD-MI', 'TBD'],
+      'Other State', 'Ex Local', 'MI-Other','TBD-MI', 'TBD']),
    sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter',
       'colorFilter', 'classFilter', function () {
          let out = this.get('model.mich');
@@ -49,7 +49,7 @@ export default Controller.extend({
 
          return out;
       }),
-   sortList: ['id', 'ident', 'manufacturer', 'class', 'type', 'model', 'airport', 'color', 'year'],
+   sortList: Object.freeze(['id', 'ident', 'manufacturer', 'class', 'type', 'model', 'airport', 'color', 'year']),
    mfgFilter: 'ALL',
    airportFilter: 'ALL',
    colorFilter: 'ALL',

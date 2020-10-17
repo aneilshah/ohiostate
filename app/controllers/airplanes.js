@@ -1,6 +1,11 @@
+/* global $ */
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { later } from '@ember/runloop';
+import {
+  addNewAirplane,
+  refYear
+} from "../utils/functions";
 
 export default Controller.extend({
   sortBy: 'manufacturer',
@@ -18,37 +23,41 @@ export default Controller.extend({
   title: '',
   //-----------------------------------
   // Filtering and sorting
-  mfgList: [
+  mfgList: Object.freeze([
     'ALL','Beech', 'Cessna', 'Cirrus', 'Mooney','Piper',
     'Aero','Aeronca', 'American', 'Bellanca', 'Boeing', 'Champion', 'Diamond','Eng Research', 'Extra',
     'Fairchild', 'Funk', 'Gevalt', 'Glasair','Lancair','Luscombe', 'Maule', 'Navion',
     'Pitts','Socata','Taylorcraft',
-    'Kitfox','Rans','Vans', 'Homebuilt','TBD','Other'],
-  classList: [
+    'Kitfox','Rans','Vans', 'Homebuilt','TBD','Other']),
+  classList: Object.freeze([
     'ALL','*New*','Single', 'Turbo', 'Twin', 'Learjet', 'Jet', 'Helicopter',
-    'Biplane', 'Vintage', 'Military', 'Seaplane', 'Canard', 'EAA', 'Kitplane'],
-  airportList: [
+    'Biplane', 'Vintage', 'Military', 'Seaplane', 'Canard', 'EAA', 'Kitplane']),
+  airportList: Object.freeze([
     '','ALL','Canton', 'Oakland', 'Ann Arbor', 'Troy', 'Detroit', 'Willow Run', 'Oakland SW','Jackson',
     'Lansing', 'Brighton', 'Livingston','Grosse Ile','Mason Jewett','Romeo',
-    'CAP','Out of State', 'Ex Local', 'MI-Other','TBD'],
-  colorList: [
+    'CAP','Out of State', 'Ex Local', 'MI-Other','TBD']),
+  colorList: Object.freeze([
     'ALL','White', 'Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple', 'Beige', 'Black',
     'White/Red', 'White/Blue', 'White/Green',
-    'Other'],
-  identList:['1','2','3','4','5','6','7','8','9'],
-  backyardStatus: ['','YES'],
-  yearList: ['','2021','2020','2019','2018','2017','2016','2015','2014','2013','2012','2011',
-    '2010','2009','2008','2007','2006','2005'],
-  photoStatus:['','*'],
-  sortList: ['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'color', 'year'],
+    'Other']),
+  identList:Object.freeze(['1','2','3','4','5','6','7','8','9']),
+  backyardStatus: Object.freeze(['','YES']),
+  yearList: Object.freeze(['','2021','2020','2019','2018','2017','2016','2015','2014','2013','2012','2011',
+    '2010','2009','2008','2007','2006','2005']),
+  yearList2: Object.freeze(['ALL','2021','2020','2019','2018','2017','2016','2015','2014','2013','2012','2011',
+    '2010','2009','2008','2007','2006','2005']),
+  photoStatus:Object.freeze(['','*']),
+  sortList: Object.freeze(['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'firstSeen','lastSeen','color', 'year']),
   filterIdent: true,
   mfgFilter: 'Cessna',
   airportFilter: 'ALL',
   colorFilter: 'ALL',
   classFilter: 'ALL',
   identFilter: 'N1',
+  firstSeenFilter: 'ALL',
+  lastSeenFilter: 'ALL',
   sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter','identFilter','filterIdent',
-    'colorFilter', 'classFilter', function () {
+    'colorFilter', 'classFilter', 'firstSeenFilter','lastSeenFilter',function () {
       let out = this.get('model');
       let count=0;
       let identMatch=this.get('identFilter');
@@ -67,6 +76,12 @@ export default Controller.extend({
       }
       if (this.get('filterIdent')){
         out=out.filter(item => item.get('ident').includes(identMatch));
+      }
+      if (this.get('firstSeenFilter') !== 'ALL'){
+        out=out.filterBy('firstSeen', this.get('firstSeenFilter'));
+      }
+      if (this.get('lastSeenFilter') !== 'ALL'){
+        out=out.filterBy('lastSeen', this.get('lastSeenFilter'));
       }
 
       out = out.sortBy(this.get('sortBy'));
@@ -114,44 +129,8 @@ export default Controller.extend({
       let ident='N'+this.get('dlgData');
       let firstYear=this.get('dlgYear');
 
-      if (isUnique(this,ident)) {
+      let success = addNewAirplane(this,ident,firstYear);
 
-        let newAirplane = this.store.createRecord('airplane', {
-          id: parseInt(getLastID(this)) + 1,
-          airport: '',
-          backyard: false,
-          class: '*New*',
-          color: '',
-          comment: '',
-          dateAdded: getToday(),
-          firstSeen: firstYear,
-          ident: ident,
-          lastSeen: firstYear,
-          manufacturer: '',
-          model: '',
-          photo: '',
-          registered: '',
-          seenAirport: false,
-          seenAirshow: false,
-          seenBackyard: false,
-          seenMI:false,
-          seenOOS:false,
-          type: '',
-          year: '',
-        });
-
-        newAirplane.save().then(() => {
-            console.log('New Airplane [' + ident + '] Saved');
-          },
-          () => {
-            console.log('Save Failed');
-            alert('Save Failed');
-          });
-      }
-      else
-      {
-        alert('Duplicate Aircraft');
-      }
       this.set('showDlg', 'NONE');
 
       //Clear Selection Data
@@ -180,14 +159,11 @@ export default Controller.extend({
       alert(val);
       return false;  //suppress context menu
     },
-    import(){
-      this.transitionToRoute('import-airplanes');
-    },
     new(){
       this.transitionToRoute('add-airplane');
     },
     newDlg(){
-      this.set('dlgYear','2020');
+      this.set('dlgYear',refYear());
       this.set('showDlg', 'NEW');
     },
     openHist(id){
@@ -246,10 +222,22 @@ export default Controller.extend({
       }
     },
     test(){
-      let data = this.get('model');
-      data.forEach(function (airplane) {
-        //airplane.save();
-      });
+      let allowTest=false;
+      if (allowTest) {
+        let data = this.get('model');
+        let cnt = 0;
+        data.forEach(function (airplane) {
+          if (airplane.get('dateAdded') === null && airplane.get('firstSeen') !== null) {
+            cnt++;
+            let first = airplane.get('firstSeen');
+            console.log(cnt + '. Missing Date Added: ' + airplane.get('ident') + ' ' + first + ' ' + '1/1/' + first);
+            airplane.set('dateAdded', '1/1/' + first);
+            airplane.save();
+          }
+          //airplane.save();
+        });
+      }
+      else alert('No Test Function Defined');
     },
     toggleAll() {
       this.toggleProperty('viewAll');
@@ -274,7 +262,11 @@ export default Controller.extend({
     },
     editDlg(val1, val2){
       //va1 = item, val2=data record
-      if (val1 === 'comment') {
+      if (val1 === 'allYears') {
+        this.set('title', 'All Years Seen');
+        this.set('showDlg', 'EDIT');
+      }
+      else if (val1 === 'comment') {
         this.set('title', 'Comment');
         this.set('showDlg', 'EDIT');
       }
@@ -336,10 +328,10 @@ export default Controller.extend({
 
       // special logic
       if (val1==='lastSeen' && (val2.get('lastSeen')==='' || val2.get('lastSeen')===null)) {
-        this.set('dlgData', '2020');
+        this.set('dlgData', refYear());
       }
       else if (val1==='firstSeen' && (val2.get('firstSeen')==='' || val2.get('firstSeen')===null)) {
-        this.set('dlgData', '2020');
+        this.set('dlgData', refYear());
       }
       else {
         this.set('dlgData', val2.get(val1));
@@ -352,11 +344,13 @@ export default Controller.extend({
       this.set('dlgScrollTop', $(window).scrollTop());
     },
     saveDlgData(){
-      var self = this;
+      let self = this;
       let record = this.get('selectedRecord');
+      let dataItem = this.get('selectedData');
+      let val = this.get('dlgData');
       if (record !== null) {
         console.log(record);
-        record.set(this.get('selectedData'), this.get('dlgData'));
+        record.set(dataItem, val);
 
         //check for model update
         if (this.get('selectedData')==='model'){
@@ -368,14 +362,24 @@ export default Controller.extend({
         }
 
         //Check for out of state
-        if (this.get('selectedData')==='registered'){
-          if (this.get('dlgData')==='CAP'){
+        if (dataItem==='registered'){
+          if (val==='CAP'){
             record.set('airport','CAP');
           }
-          else if (this.get('dlgData').length===2){
+          else if (val.length===2){
             record.set('airport','Out of State');
           }
         }
+
+        // update All Years
+        if (dataItem==='lastSeen'){
+          let allYears = this.get('allYears');
+          if (!allYears.includes(val)){
+            allYears+='|'+val;
+            record.set('allYears',val);
+          }
+        }
+
         record.save();
       }
       //refresh after delay
@@ -398,62 +402,6 @@ export default Controller.extend({
     },
   }
 });
-
-function day(date) {
-  var numbers = date.match(/\d+/g);
-  var yyyy = parseInt(numbers[2]);
-  var mm = parseInt(numbers[0]);
-  var dd = parseInt(numbers[1]);
-  if (yyyy > 2020 || yyyy < 2000) {
-    yyyy = 2000;
-  }
-  if (mm < 1 || mm > 12) {
-    mm = 0;
-  }
-  if (dd < 1 || dd > 31) {
-    dd = 0;
-  }
-  var day = yyyy * 10000 + mm * 100 + dd;
-  return day;
-}
-
-function getLastID(context) {
-  var id = 0;
-  let data = context.get('model');
-  data.forEach(function (airplane) {
-      if (parseInt(airplane.get('id')) > id) {
-        id = airplane.get('id');
-      }
-  });
-  return id;
-}
-
-function isUnique(context,ident){
-  var isUnique = true;
-  let data = context.get('model');
-  data.forEach(function (airplane) {
-    if (airplane.get('ident') === ident) {
-      isUnique=false;
-    }
-  });
-
-  return isUnique;
-}
-
-function getToday(zeroPadDate=false) {
-  let today = new Date();
-  let dd = today.getDate();
-  let mm = today.getMonth() + 1; //January is 0!
-  let yyyy = today.getFullYear();
-
-  if (zeroPadDate) {
-    if (dd < 10) {dd = '0' + dd;}
-    if (mm < 10) {mm = '0' + mm;}
-  }
-
-  today = mm + '/' + dd + '/' + yyyy;
-  return today;
-}
 
 function checkModel(model){
   if (model==='SR20') {return { match : true, mfg : 'Cirrus', type : 'SR20' };}
