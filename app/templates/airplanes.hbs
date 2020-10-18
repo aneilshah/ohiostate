@@ -19,50 +19,50 @@
 &emsp;&emsp;
 
 {{#paper-select
-  label="Class"
-  selected=classFilter
-  onChange=(action 'setClass')
-  options=classList
+        label="Class"
+        selected=classFilter
+        onChange=(action 'setClass')
+        options=classList
 as |item|
 }}
   {{item}}
 {{/paper-select}}
 &emsp;
 {{#paper-select
-  label="Manufacturer"
-  selected=mfgFilter
-  onChange=(action 'setMfg')
-  options=mfgList
+        label="Manufacturer"
+        selected=mfgFilter
+        onChange=(action 'setMfg')
+        options=mfgList
 as |item|
 }}
   {{item}}
 {{/paper-select}}
 &emsp;
 {{#paper-select
-  label="Airport"
-  selected=airportFilter
-  onChange=(action (mut airportFilter))
-  options=airportList
+        label="Airport"
+        selected=airportFilter
+        onChange=(action (mut airportFilter))
+        options=airportList
 as |item|
 }}
   {{item}}
 {{/paper-select}}
 &emsp;
 {{#paper-select
-  label="Color"
-  selected=colorFilter
-  onChange=(action (mut colorFilter))
-  options=colorList
+        label="Color"
+        selected=colorFilter
+        onChange=(action (mut colorFilter))
+        options=colorList
 as |item|
 }}
   {{item}}
 {{/paper-select}}
 &emsp;
 {{#paper-select
-  label="First Seen"
-  selected=firstSeenFilter
-  onChange=(action (mut firstSeenFilter))
-  options=yearList2
+        label="First Seen"
+        selected=firstSeenFilter
+        onChange=(action (mut firstSeenFilter))
+        options=yearList2
 as |item|
 }}
   {{item}}
@@ -78,30 +78,38 @@ as |item|
   {{item}}
 {{/paper-select}}
 <br>
+Total Count: {{sorted.count}}&emsp;
 
-{{#if filterIdent}}
-  Total Count: {{sorted.count}}&emsp;
-  <button {{action 'setIdentFilter' '1'}}>N1</button>
-  <button {{action 'setIdentFilter' '2'}}>N2</button>
-  <button {{action 'setIdentFilter' '3'}}>N3</button>
-  <button {{action 'setIdentFilter' '4'}}>N4</button>
-  <button {{action 'setIdentFilter' '5'}}>N5</button>
-  <button {{action 'setIdentFilter' '6'}}>N6</button>
-  <button {{action 'setIdentFilter' '7'}}>N7</button>
-  <button {{action 'setIdentFilter' '8'}}>N8</button>
-  <button {{action 'setIdentFilter' '9'}}>N9</button>
-  <button {{action 'clearIdentList'}}>ALL</button> &emsp;
-  {{#if lockOne}}
-    [{{identFilter}}]&emsp;
+{{#if (eq searchMode 'NORMAL')}}
+  {{#if filterIdent}}
+    <b>IDENT:</b>&ensp;
+    <button {{action 'setIdentFilter' '1'}}>N1</button>
+    <button {{action 'setIdentFilter' '2'}}>N2</button>
+    <button {{action 'setIdentFilter' '3'}}>N3</button>
+    <button {{action 'setIdentFilter' '4'}}>N4</button>
+    <button {{action 'setIdentFilter' '5'}}>N5</button>
+    <button {{action 'setIdentFilter' '6'}}>N6</button>
+    <button {{action 'setIdentFilter' '7'}}>N7</button>
+    <button {{action 'setIdentFilter' '8'}}>N8</button>
+    <button {{action 'setIdentFilter' '9'}}>N9</button>
+    <button {{action 'clearIdentList'}}>ALL</button> &emsp;
+    {{#if lockOne}}
+      [{{identFilter}}]&emsp;
+    {{else}}
+      [{{identFilter}}{{identFilter2}}]&emsp;
+    {{/if}}
+    {{#paper-checkbox value=lockOne onChange=(action (mut lockOne))}}Lock One Digit{{/paper-checkbox}}&emsp;
+    <button {{action 'stringSearch'}}>STRING SEARCH</button>
+    <br>
   {{else}}
-    [{{identFilter}}{{identFilter2}}]&emsp;
+    Total Count: {{sorted.count}}&emsp;
+    <button {{action 'filterIdents'}}>FILTER IDENTS</button>
+    <br>
   {{/if}}
-  {{#paper-checkbox value=lockOne onChange=(action (mut lockOne))}}Lock One Digit{{/paper-checkbox}}
-  <br>
 {{else}}
-  Total Count: {{sorted.count}}&emsp;
-  <button {{action 'filterIdents'}}>FILTER IDENTS</button>
-  <br>
+  <b>IDENT STRING SEARCH: <span style="color:blue" {{action 'editDlg' 'searchString'}}>{{searchString}}</span></b>&emsp;
+  <button {{action 'stringSearch' false}}>NORMAL SEARCH</button>
+  <br><br>
 {{/if}}
 
 {{#if (eq showDlg "EDIT")}}
@@ -128,7 +136,7 @@ as |item|
     {{#paper-dialog-content}}
       <h2 class="md-title">Edit {{title}}</h2>
       {{#paper-select
-        label=title selected=dlgData options=dlgDropdown onChange=(action (mut dlgData)) as |item|
+              label=title selected=dlgData options=dlgDropdown onChange=(action (mut dlgData)) as |item|
       }}
         {{item}}
       {{/paper-select}}
@@ -147,7 +155,7 @@ as |item|
       <h2 class="md-title">Add New Airplane</h2>
       N{{paper-input placeholder="ident" autofocus=true value=dlgData onChange=(action (mut dlgData))}}
       {{#paper-select
-        label='First Seen' selected=dlgYear options=yearList onChange=(action (mut dlgYear)) as |item|
+              label='First Seen' selected=dlgYear options=yearList onChange=(action (mut dlgYear)) as |item|
       }}
         {{item}}
       {{/paper-select}}

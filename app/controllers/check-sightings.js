@@ -109,14 +109,17 @@ export default Controller.extend({
       this.set('isProcessed',true);
       refresh(this);
     },
-    updatedNewForYear(plane,index){
+    updateNewForYear(plane,index){
       plane.set('lastSeen',refYear());
-      //Update the all years list
+      let allYears=plane.get('allYears');
+      if (!allYears.includes(refYear())){
+        allYears+='|'+refYear();
+        plane.set('allYears',allYears);
+      }
       plane.save();
       let list=this.get('newForYear');
       list.splice(index,1);
       refresh(this);
-
     }
   }
 });

@@ -50,7 +50,7 @@ export default Controller.extend({
   photoStatus:Object.freeze(['','*']),
   sortList: Object.freeze(['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'firstSeen','lastSeen','color', 'year']),
   filterIdent: true,
-  lockOne: true,
+  lockOne: false,
   mfgFilter: 'Cessna',
   airportFilter: 'ALL',
   colorFilter: 'ALL',
@@ -59,8 +59,11 @@ export default Controller.extend({
   identFilter2: '',
   firstSeenFilter: 'ALL',
   lastSeenFilter: 'ALL',
-  sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter','identFilter','identFilter2',
-    'filterIdent', 'colorFilter', 'classFilter', 'firstSeenFilter','lastSeenFilter','lockOne', function () {
+  searchMode: 'NORMAL',
+  seachString:'',
+  sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter',
+    'identFilter','identFilter2', 'filterIdent', 'colorFilter', 'classFilter', 'firstSeenFilter','lastSeenFilter',
+    'lockOne', 'searchMode', 'searchString', function () {
       let out = this.get('model');
       let count=0;
       let identMatch=this.get('identFilter');
@@ -68,26 +71,36 @@ export default Controller.extend({
         identMatch+=this.get('identFilter2');
       }
 
+      // These are allowed in all modes
       if (this.get('mfgFilter') !== 'ALL') {
         out = out.filterBy('manufacturer', this.get('mfgFilter'));
       }
-      if (this.get('classFilter') !== 'ALL') {
-        out = out.filterBy('class', this.get('classFilter'));
+
+      // Only Normal Mode
+      if (this.get('searchMode')==='NORMAL'){
+        if (this.get('classFilter') !== 'ALL') {
+          out = out.filterBy('class', this.get('classFilter'));
+        }
+        if (this.get('airportFilter') !== 'ALL') {
+          out = out.filterBy('airport', this.get('airportFilter'));
+        }
+        if (this.get('colorFilter') !== 'ALL') {
+          out = out.filterBy('color', this.get('colorFilter'));
+        }
+        if (this.get('filterIdent')){
+          out=out.filter(item => item.get('ident').includes(identMatch));
+        }
+        if (this.get('firstSeenFilter') !== 'ALL'){
+          out=out.filterBy('firstSeen', this.get('firstSeenFilter'));
+        }
+        if (this.get('lastSeenFilter') !== 'ALL'){
+          out=out.filterBy('lastSeen', this.get('lastSeenFilter'));
+        }
       }
-      if (this.get('airportFilter') !== 'ALL') {
-        out = out.filterBy('airport', this.get('airportFilter'));
-      }
-      if (this.get('colorFilter') !== 'ALL') {
-        out = out.filterBy('color', this.get('colorFilter'));
-      }
-      if (this.get('filterIdent')){
-        out=out.filter(item => item.get('ident').includes(identMatch));
-      }
-      if (this.get('firstSeenFilter') !== 'ALL'){
-        out=out.filterBy('firstSeen', this.get('firstSeenFilter'));
-      }
-      if (this.get('lastSeenFilter') !== 'ALL'){
-        out=out.filterBy('lastSeen', this.get('lastSeenFilter'));
+
+      // Search String Mode
+      else if (this.get('searchMode')==='STRING'){
+        out=out.filter(item => item.get('ident').includes(this.get('searchString')));
       }
 
       out = out.sortBy(this.get('sortBy'));
@@ -245,6 +258,15 @@ export default Controller.extend({
         this.set('sortBy', val);
       }
     },
+    stringSearch(turnOn=true){
+      if (turnOn){
+        this.set('searchMode','STRING');
+        this.set('searchString','EDIT');
+      }
+      else {
+        this.set('searchMode','NORMAL');
+      }
+    },
     test(){
       let allowTest=false;
       if (allowTest) {
@@ -301,6 +323,10 @@ export default Controller.extend({
         this.set('title', 'Registered In:');
         this.set('showDlg', 'EDIT');
       }
+      else if (val1 === 'searchString') {
+        this.set('title', 'Ident Search String');
+        this.set('showDlg', 'EDIT');
+      }
       else if (val1 === 'type') {
         this.set('title', 'Type');
         this.set('showDlg', 'EDIT');
@@ -351,6 +377,9 @@ export default Controller.extend({
       }
       else if (val1==='firstSeen' && (val2.get('firstSeen')==='' || val2.get('firstSeen')===null)) {
         this.set('dlgData', refYear());
+      }
+      else if (val1==='searchString'){
+        this.set('dlgData',this.get('searchString'));
       }
       else {
         this.set('dlgData', val2.get(val1));
@@ -411,6 +440,17 @@ export default Controller.extend({
             alert('Invalid Date: First Seen > Last Seen');
             allowSave=false;
           }
+        }
+
+        // Search String
+        if (dataItem==='searchString'){
+          if (val.length>1){
+            this.set('searchString',val);
+          } else{
+            alert('Search must have at least 2 characters');
+          }
+
+          allowSave=false;
         }
 
         // Only save if there are no errors

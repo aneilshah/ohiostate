@@ -33,12 +33,13 @@ List N-Numbers [N12345, N34567]:
 
   {{#if updatedNewForYear}}
     <h2>New For Year</h2>
-    <table style="width:50%">
+    <table style="width:60%">
       <tr>
-        <th style="width:10%">#</th>
+        <th style="width:5%">#</th>
         <th style="width:10%">IDENT#</th>
         <th style="width:30%">TYPE</th>
         <th style="width:10%">LAST</th>
+        <th style="width:30%">ALL YRS</th>
         <th style="width:10%">UPDATE</th>
         <th style="width:10%">IGNORE</th>
       </tr>
@@ -49,6 +50,7 @@ List N-Numbers [N12345, N34567]:
         <td>{{data.ident}}</td>
         <td>{{data.manufacturer}} {{data.model}}</td>
         <td>{{data.lastSeen}}</td>
+        <td>{{data.allYears}}</td>
         <td><button {{action 'updateNewForYear' data}}>UPDATE</button></td>
         <td><button {{action 'ignoreNewView' index}}>IGNORE</button></td>
       </tr><br>
