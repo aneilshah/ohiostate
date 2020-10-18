@@ -4,7 +4,8 @@ import { computed } from '@ember/object';
 import { later } from '@ember/runloop';
 import {
   addNewAirplane,
-  refYear
+  refYear,
+  sortYears
 } from "../utils/functions";
 
 export default Controller.extend({
@@ -49,18 +50,23 @@ export default Controller.extend({
   photoStatus:Object.freeze(['','*']),
   sortList: Object.freeze(['airport', 'class', 'ident', 'manufacturer', 'model', 'type', 'firstSeen','lastSeen','color', 'year']),
   filterIdent: true,
+  lockOne: true,
   mfgFilter: 'Cessna',
   airportFilter: 'ALL',
   colorFilter: 'ALL',
   classFilter: 'ALL',
   identFilter: 'N1',
+  identFilter2: '',
   firstSeenFilter: 'ALL',
   lastSeenFilter: 'ALL',
-  sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter','identFilter','filterIdent',
-    'colorFilter', 'classFilter', 'firstSeenFilter','lastSeenFilter',function () {
+  sorted: computed('refresh', 'reverse', 'model', 'sortBy', 'mfgFilter', 'airportFilter','identFilter','identFilter2',
+    'filterIdent', 'colorFilter', 'classFilter', 'firstSeenFilter','lastSeenFilter','lockOne', function () {
       let out = this.get('model');
       let count=0;
       let identMatch=this.get('identFilter');
+      if (!this.get('lockOne')){
+        identMatch+=this.get('identFilter2');
+      }
 
       if (this.get('mfgFilter') !== 'ALL') {
         out = out.filterBy('manufacturer', this.get('mfgFilter'));
@@ -94,6 +100,11 @@ export default Controller.extend({
     }),
   //--------------------------------------
   actions: {
+    all(){
+      this.set('mfgFilter','ALL');
+      this.set('classFilter','ALL');
+      this.set('filterIdent',false);
+    },
     beech(){
       this.set('mfgFilter','Beech');
       this.set('classFilter','Single');
@@ -141,7 +152,7 @@ export default Controller.extend({
     delete(){
       let match=null;
       this.get('model').forEach(function (airplane) {
-        if (airplane.get('ident') === 'DELETE') {
+        if (airplane.get('ident').toLowerCase() === 'delete') {
           match = airplane;
         }
       });
@@ -151,6 +162,7 @@ export default Controller.extend({
         alert('Deleted Record# '+match.get('id'));
       }
       else {alert('No airplanes deleted');}
+      refresh(this);
     },
     filterIdents(){
       this.set('filterIdent',true);
@@ -204,7 +216,18 @@ export default Controller.extend({
       }
     },
     setIdentFilter(val){
-      this.set('identFilter','N'+val);
+      if (this.get('lockOne')) {
+        this.set('identFilter', 'N' + val);
+      }
+      else {
+        if (this.get('identFilter2')===''){
+          this.set('identFilter2',val);
+        }
+        else {
+          this.set('identFilter', 'N' + val);
+          this.set('identFilter2','');
+        }
+      }
     },
     showID(record){
       alert(record.get('id'));
@@ -212,6 +235,7 @@ export default Controller.extend({
     showNew(){
       this.set('classFilter','*New*');
       this.set('mfgFilter','ALL');
+      this.set('filterIdent',false);
     },
     sort(val){
       if (this.get('sortBy') === val) {
@@ -227,13 +251,8 @@ export default Controller.extend({
         let data = this.get('model');
         let cnt = 0;
         data.forEach(function (airplane) {
-          if (airplane.get('dateAdded') === null && airplane.get('firstSeen') !== null) {
-            cnt++;
-            let first = airplane.get('firstSeen');
-            console.log(cnt + '. Missing Date Added: ' + airplane.get('ident') + ' ' + first + ' ' + '1/1/' + first);
-            airplane.set('dateAdded', '1/1/' + first);
-            airplane.save();
-          }
+          cnt++;
+          console.log(cnt+'. '+airplane.get('ident'));
           //airplane.save();
         });
       }
@@ -263,7 +282,7 @@ export default Controller.extend({
     editDlg(val1, val2){
       //va1 = item, val2=data record
       if (val1 === 'allYears') {
-        this.set('title', 'All Years Seen');
+        this.set('title', 'All Years Seen ('+val2.get('yearCount')+')');
         this.set('showDlg', 'EDIT');
       }
       else if (val1 === 'comment') {
@@ -348,10 +367,8 @@ export default Controller.extend({
       let record = this.get('selectedRecord');
       let dataItem = this.get('selectedData');
       let val = this.get('dlgData');
+      let allowSave=true;
       if (record !== null) {
-        console.log(record);
-        record.set(dataItem, val);
-
         //check for model update
         if (this.get('selectedData')==='model'){
           let result=checkModel(this.get('dlgData'));
@@ -373,14 +390,34 @@ export default Controller.extend({
 
         // update All Years
         if (dataItem==='lastSeen'){
-          let allYears = this.get('allYears');
+          let allYears = record.get('allYears');
           if (!allYears.includes(val)){
             allYears+='|'+val;
-            record.set('allYears',val);
+            allYears=sortYears(allYears);
+            record.set('allYears',allYears);
           }
         }
 
-        record.save();
+        // Validity Check
+        if (dataItem==='lastSeen'){
+          if (val<record.get('firstSeen')){
+            alert('Invalid Date: Last Seen < First Seen');
+            allowSave=false;
+          }
+        }
+
+        if (dataItem==='firstSeen'){
+          if (val>record.get('lastSeen')){
+            alert('Invalid Date: First Seen > Last Seen');
+            allowSave=false;
+          }
+        }
+
+        // Only save if there are no errors
+        if (allowSave) {
+          record.set(dataItem, val);
+          record.save();
+        }
       }
       //refresh after delay
       this.send('closeDlg');
@@ -455,3 +492,10 @@ function checkModel(model){
   //else no match
   else return { match : false, mfg : '', type : '' };
 }
+
+function refresh(context){
+  later((function () {
+    context.toggleProperty('refresh');
+  }), 500);
+}
+

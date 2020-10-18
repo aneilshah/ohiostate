@@ -1,0 +1,65 @@
+{{outlet}}
+<h1>Check Airplane Sightings</h1>
+<button {{action 'back'}}>Back to Airplanes</button>
+{{#paper-checkbox value=allowSave onChange=(action (mut allowSave))}}
+  Allow Saving Data: {{if allowSave "Ready To Save" "Check Data First"}}
+{{/paper-checkbox}}<br><br>
+<b>This operation will check the idents, and updated to new sighting for the year, or add as new airplane if not found.</b><br><br>
+List N-Numbers [N12345, N34567]:
+<button {{action 'clear'}}>Clear List</button>
+<button {{action 'process'}}>Process Data</button>
+<br><br>
+{{textarea value=reviewText rows="5" cols='150'}}<br><br>
+{{#if isProcessed}}
+  {{#if updatedNewPlanes}}
+    <h2>New Planes</h2>
+    <table style="width:30%">
+      <tr>
+        <th style="width:10%">#</th>
+        <th style="width:10%">IDENT#</th>
+        <th style="width:10%">UPDATE</th>
+        <th style="width:10%">IGNORE</th>
+      </tr>
+      {{#each updatedNewPlanes as |ident index|}}
+        <tr>
+          <td>{{addone index}}</td>
+          <td>{{ident}}</td>
+          <td><button {{action 'addNewPlane' ident index}}>ADD</button></td>
+          <td><button {{action 'ignoreNewPlane' index}}>IGNORE</button></td>
+        </tr>
+      {{/each}}
+    </table><br>
+  {{/if}}
+
+  {{#if updatedNewForYear}}
+    <h2>New For Year</h2>
+    <table style="width:50%">
+      <tr>
+        <th style="width:10%">#</th>
+        <th style="width:10%">IDENT#</th>
+        <th style="width:30%">TYPE</th>
+        <th style="width:10%">LAST</th>
+        <th style="width:10%">UPDATE</th>
+        <th style="width:10%">IGNORE</th>
+      </tr>
+
+    {{#each updatedNewForYear as |data index|}}
+      <tr>
+        <td>{{addone index}}</td>
+        <td>{{data.ident}}</td>
+        <td>{{data.manufacturer}} {{data.model}}</td>
+        <td>{{data.lastSeen}}</td>
+        <td><button {{action 'updateNewForYear' data}}>UPDATE</button></td>
+        <td><button {{action 'ignoreNewView' index}}>IGNORE</button></td>
+      </tr><br>
+    {{/each}}
+    </table><br>
+  {{/if}}
+
+  {{#if updatedAlreadyRecorded}}
+    <h2>Already Recorded</h2>
+    {{#each updatedAlreadyRecorded as |data index|}}
+      {{addone index}}. {{data.ident}} [{{data.lastSeen}}]
+    {{/each}}<br>
+  {{/if}}
+{{/if}}

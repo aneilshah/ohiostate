@@ -28,7 +28,7 @@ export default DS.Model.extend({
   }),
   yearCount: computed('allYears', function() {
     let allYears =this.get('allYears');
-    return allYears.split("|").length - 1;
+    return allYears.split("|").length;
   }),
 
 });

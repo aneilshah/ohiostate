@@ -4,15 +4,17 @@
   Admin Functions:
   <button {{action 'toggleDelete'}}>{{if allowDelete 'Disable Delete' 'Allow Delete'}}</button>
 {{/if}}
-<button {{action 'newDlg'}}>Add New Airplane</button>
-<button {{action 'delete'}}>Del</button>
-<button {{action 'showNew'}}>SHOW NEW</button>
+<button {{action 'newDlg'}}>ADD NEW</button>
+<button {{action 'delete'}}>DELETE</button>
+
 <button {{action 'test'}}>TEST</button>&emsp;
 <button {{action 'cessna'}}>CESSNA</button>
 <button {{action 'cirrus'}}>CIRRUS</button>
 <button {{action 'piper'}}>PIPER</button>
 <button {{action 'mooney'}}>MOONEY</button>
 <button {{action 'beech'}}>BEECH</button>
+<button {{action 'showNew'}}>*NEW*</button>
+<button {{action 'all'}}>ALL</button>
 <!-- <button {{action 'test'}}>Test</button> -->
 &emsp;&emsp;
 
@@ -88,7 +90,13 @@ as |item|
   <button {{action 'setIdentFilter' '7'}}>N7</button>
   <button {{action 'setIdentFilter' '8'}}>N8</button>
   <button {{action 'setIdentFilter' '9'}}>N9</button>
-  <button {{action 'clearIdentList'}}>ALL</button>
+  <button {{action 'clearIdentList'}}>ALL</button> &emsp;
+  {{#if lockOne}}
+    [{{identFilter}}]&emsp;
+  {{else}}
+    [{{identFilter}}{{identFilter2}}]&emsp;
+  {{/if}}
+  {{#paper-checkbox value=lockOne onChange=(action (mut lockOne))}}Lock One Digit{{/paper-checkbox}}
   <br>
 {{else}}
   Total Count: {{sorted.count}}&emsp;
@@ -190,6 +198,7 @@ as |item|
       <th {{action 'sort' "registered"}}>Registered</th>
       <th {{action 'sort' "firstSeen"}}>First</th>
       <th {{action 'sort' "lastSeen"}}>Last</th>
+      <th {{action 'sort' "yearCount"}}>#Yrs</th>
       <th {{action 'sort' "color"}}>Color</th>
       <th {{action 'sort' "photo"}}>NP</th>
       <th>Reg</th>
@@ -218,6 +227,7 @@ as |item|
         <td {{action 'editDlg' "registered" data}}>{{data.registered}}</td>
         <td {{action 'editDlg' "firstSeen" data}}>{{data.firstSeen}}</td>
         <td {{action 'editDlg' "lastSeen" data}}>{{data.lastSeen}}</td>
+        <td {{action 'editDlg' "yearCount" data}}>{{data.yearCount}}</td>
         <td {{action 'editDlg' "color" data}}>{{data.color}}</td>
         <td {{action 'togglePhoto' data}}>{{data.photo}}</td>
         <td><button {{action 'openWindow' data.ident}}>Reg</button></td>

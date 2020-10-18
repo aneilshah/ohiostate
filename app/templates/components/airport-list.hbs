@@ -1,86 +1,80 @@
-<style>
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: center;
-        padding: 8px;
-    }
-
-    tr:nth-child(even) {
-        background-color: #dddddd;
-    }
-</style>
-<table>
+<table style="width:50%">
     <tr>
-        <th>Airport</th>
-        <th>Location</th>
-        <th>#Airplanes</th>
-        <th>Flights/Day</th>
+        <th style="text-align:left; width:20%">Airport</th>
+        <th style="width:30%">Location</th>
+        <th style="width:10%">#Airplanes</th>
+        <th style="width:10%">Flights/Day</th>
+        <th style="width:10%">Info</th>
     </tr>
     <tr>
-        <td>{{#link-to 'ann-arbor'}}Ann Arbor (KARB){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+      <td style="text-align:left">{{#link-to 'ann-arbor'}}Ann Arbor (KARB){{/link-to}}</td>
+      <td>Ann Arbor</td>
+      <td>174</td>
+      <td>166</td>
+      <td>{{airport-link ident='ARB'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'canton'}}Canton (1D2){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'canton'}}Canton (1D2){{/link-to}}</td>
+        <td>Canton</td>
+        <td>84</td>
+        <td>38</td>
+      <td>{{airport-link ident='1D2'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'oakland'}}Oakland (KPTK){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'oakland'}}Oakland (KPTK){{/link-to}}</td>
+        <td>Pontiac</td>
+        <td>551</td>
+        <td>383</td>
+      <td>{{airport-link ident='PTK'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'troy'}}Troy (KVLL){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'troy'}}Troy (KVLL){{/link-to}}</td>
+        <td>Troy</td>
+        <td>113</td>
+        <td>82</td>
+      <td>{{airport-link ident='VLL'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'willow'}}Willow Run (KYIP){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'willow'}}Willow Run (KYIP){{/link-to}}</td>
+        <td>Ypsilanti</td>
+        <td>157</td>
+        <td>160</td>
+      <td>{{airport-link ident='YIP'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'oaklandsw'}}Oakland SW (Y47){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'oaklandsw'}}Oakland SW (Y47){{/link-to}}</td>
+        <td>New Hudson</td>
+        <td>38</td>
+        <td>36</td>
+      <td>{{airport-link ident='Y47'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'brighton'}}Detroit (KDET){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'brighton'}}Detroit (KDET){{/link-to}}</td>
+        <td>Detroit</td>
+        <td>74</td>
+        <td>94</td>
+      <td>{{airport-link ident='DET'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'jackson'}}Jackson (KJXN){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'jackson'}}Jackson (KJXN){{/link-to}}</td>
+        <td>Jackson</td>
+        <td>96</td>
+        <td>95</td>
+      <td>{{airport-link ident='JXN'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'brighton'}}Brighton (45G){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'brighton'}}Brighton (45G){{/link-to}}</td>
+        <td>Brighton</td>
+        <td>91</td>
+        <td>48</td>
+      <td>{{airport-link ident='45G'}}</td>
     </tr>
     <tr>
-        <td>{{#link-to 'brighton'}}Livingston (KOZW){{/link-to}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align:left">{{#link-to 'brighton'}}Livingston (KOZW){{/link-to}}</td>
+        <td>Livingston</td>
+        <td>100</td>
+        <td>123</td>
+      <td>{{airport-link ident='OZW'}}</td>
     </tr>
 
 </table>

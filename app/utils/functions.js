@@ -1,10 +1,16 @@
-export {addNewAirplane,clipText,dayValue, getDay, getMonth, getMonthName,
-  getToday, getTodaySortable, getYear, getYesterday, properCase,
-  refYear,setDlgEdit,setDlgEditDate, setDlgDropdown};
+export {addNewAirplane,clipText,checkIdentFormat, cleanText,dayValue, getDay, getMonth, getMonthName,
+  getToday, getTodaySortable, getYear, getYesterday, isUniqueIdent, properCase,
+  refYear,setDlgEdit,setDlgEditDate, setDlgDropdown, sortYears};
 
 function addNewAirplane(context,ident,firstYear) {
   let success=false;
-  if (isUniqueIdent(context,ident)) {
+  if (!isUniqueIdent(context,ident).isUnique){
+    alert('Did not create '+ident+'.  ALREADY EXISTS');
+  }
+  else if (!checkIdentFormat(ident)) {
+    alert('Did not create '+ident+'.  INVALID FORMART');
+  }
+  else { // Valid
     let newAirplane = context.store.createRecord('airplane', {
       id: parseInt(getLastID(context)) + 1,
       airport: '',
@@ -42,8 +48,6 @@ function addNewAirplane(context,ident,firstYear) {
   return success;
 }
 
-
-
 function clipText(text, count) {
   let str = text.toString();
   str=str.replace('  ',' ');
@@ -51,6 +55,12 @@ function clipText(text, count) {
   //let len = str.length;
   let truncLen = parseInt(count);
   return str.slice(0,truncLen);
+}
+
+function cleanText(text) {
+  let str = text.toString();
+  str=str.replace(' ','');
+  return str;
 }
 
 function dayValue(date, isStandard=true){
@@ -201,14 +211,16 @@ function setDlgDropdown(self,title,list){
 function isUniqueIdent(context,ident){
   var isUnique = true;
   let data = context.get('model');
+  let record=null;
   data.forEach(function (airplane) {
     if (airplane.get('ident') === ident) {
       isUnique=false;
+      record=airplane;
     }
   });
 
   if (!isUnique) {console.log('Duplicate Ident');}
-  return isUnique;
+  return {isUnique:isUnique, record:record};
 }
 
 function getLastID(context) {
@@ -220,4 +232,34 @@ function getLastID(context) {
     }
   });
   return id;
+}
+
+function sortYears(allYears){
+  let yearList=allYears.split('|');
+  let years={};
+  let result='';
+  yearList.forEach(function(year){
+    years[year.trim()]=year.trim();
+  });
+  yearList=Object.keys(years).sort();
+  let count=1;
+  yearList.forEach(function(year){
+    if (count===1) result+=year;
+    else {result+='|'+year;}
+    count++;
+  });
+  console.log('Sorted Years: '+result);
+  return result;
+}
+
+function checkIdentFormat(ident) {
+  var isValid = true;
+  if (ident.length > 6) {
+    isValid = false;
+  } else if (ident.length <3) {
+    isValid = false;
+  } else if (ident.charAt(0).toLowerCase() !== 'n') {
+    isValid = false;
+  }
+  return isValid;
 }
