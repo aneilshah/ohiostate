@@ -111,6 +111,7 @@ export default Controller.extend({
 
       return {list:out, count:count};
     }),
+
   //--------------------------------------
   actions: {
     all(){
@@ -147,7 +148,7 @@ export default Controller.extend({
       this.set('filterIdent',false);
     },
     copyToClip(plane){
-      alert(plane.get('manufacturer')+' '+plane.get('model')+' '+plane.get('ident'));
+      alert(plane.get('manufacturer').toLowerCase()+' '+plane.get('model')+' '+plane.get('ident'));
     },
     createNew() {
       let ident='N'+this.get('dlgData');
@@ -404,6 +405,7 @@ export default Controller.extend({
           if (result.match===true){
             record.set('type',result.type);
             record.set('manufacturer',result.mfg);
+            val=result.model;  //cleaned up from function
           }
         }
 
@@ -481,56 +483,62 @@ export default Controller.extend({
 });
 
 function checkModel(model){
-  if (model==='SR20') {return { match : true, mfg : 'Cirrus', type : 'SR20' };}
-  else if (model==='SR22') {return { match : true, mfg : 'Cirrus', type : 'SR22' };}
+
+  //Clean Model for Pipers
+  model=model.replace('PA-1','PA1');
+  model=model.replace('PA-1','PA1');
+  model=model.replace('PA-2','PA2');
+  model=model.replace('PA-3','PA3');
+  model=model.replace('PA-4','PA4');
+
+  if (model==='SR20') {return { match : true, mfg : 'Cirrus', type : 'SR20', model:model};}
+  else if (model==='SR22') {return { match : true, mfg : 'Cirrus', type : 'SR22', model:model };}
 
   //Match Cessna
-  else if (model.substr(0,3)==='120') {return { match : true, mfg : 'Cessna', type : '120' };}
-  else if (model.substr(0,3)==='140') {return { match : true, mfg : 'Cessna', type : '140' };}
-  else if (model.substr(0,3)==='150') {return { match : true, mfg : 'Cessna', type : '150' };}
-  else if (model.substr(0,3)==='152') {return { match : true, mfg : 'Cessna', type : '152' };}
-  else if (model.substr(0,3)==='162') {return { match : true, mfg : 'Cessna', type : '162' };}
-  else if (model.substr(0,3)==='172') {return { match : true, mfg : 'Cessna', type : '172' };}
-  else if (model.substr(0,3)==='177') {return { match : true, mfg : 'Cessna', type : '177' };}
-  else if (model.substr(0,3)==='180') {return { match : true, mfg : 'Cessna', type : '180' };}
-  else if (model.substr(0,3)==='182') {return { match : true, mfg : 'Cessna', type : '182' };}
-  else if (model.substr(0,3)==='208') {return { match : true, mfg : 'Cessna', type : '208' };}
-  else if (model.substr(0,3)==='210') {return { match : true, mfg : 'Cessna', type : '210' };}
-  else if (model.substr(0,3)==='337') {return { match : true, mfg : 'Cessna', type : '337' };}
+  else if (model.substr(0,3)==='120') {return { match : true, mfg : 'Cessna', type : '120', model:model};}
+  else if (model.substr(0,3)==='140') {return { match : true, mfg : 'Cessna', type : '140', model:model};}
+  else if (model.substr(0,3)==='150') {return { match : true, mfg : 'Cessna', type : '150', model:model};}
+  else if (model.substr(0,3)==='152') {return { match : true, mfg : 'Cessna', type : '152', model:model};}
+  else if (model.substr(0,3)==='162') {return { match : true, mfg : 'Cessna', type : '162', model:model};}
+  else if (model.substr(0,3)==='172') {return { match : true, mfg : 'Cessna', type : '172', model:model};}
+  else if (model.substr(0,3)==='177') {return { match : true, mfg : 'Cessna', type : '177', model:model};}
+  else if (model.substr(0,3)==='180') {return { match : true, mfg : 'Cessna', type : '180', model:model};}
+  else if (model.substr(0,3)==='182') {return { match : true, mfg : 'Cessna', type : '182', model:model};}
+  else if (model.substr(0,3)==='208') {return { match : true, mfg : 'Cessna', type : '208', model:model};}
+  else if (model.substr(0,3)==='210') {return { match : true, mfg : 'Cessna', type : '210', model:model};}
+  else if (model.substr(0,3)==='337') {return { match : true, mfg : 'Cessna', type : '337', model:model};}
+  else if (model.substr(0,4)==='T182') {return { match : true, mfg : 'Cessna', type : '182', model:model};}
+  else if (model.substr(0,5)==='TR182') {return { match : true, mfg : 'Cessna', type : '182', model:model};}
+  else if (model.substr(0,4)==='R172') {return { match : true, mfg : 'Cessna', type : '172', model:model};}
+  else if (model.substr(0,4)==='T206') {return { match : true, mfg : 'Cessna', type : '206', model:model};}
+  else if (model.substr(0,4)==='T210') {return { match : true, mfg : 'Cessna', type : '210', model:model};}
 
   //match Pipers
-  else if (model.substr(0,5)==='PA-18') {return { match : true, mfg : 'Piper', type : 'PA18' };}
-  else if (model.substr(0,5)==='PA-24') {return { match : true, mfg : 'Piper', type : 'PA24' };}
-  else if (model.substr(0,5)==='PA-28') {return { match : true, mfg : 'Piper', type : 'PA28' };}
-  else if (model.substr(0,5)==='PA-31') {return { match : true, mfg : 'Piper', type : 'PA31' };}
-  else if (model.substr(0,5)==='PA-32') {return { match : true, mfg : 'Piper', type : 'PA32' };}
-  else if (model.substr(0,5)==='PA-46') {return { match : true, mfg : 'Piper', type : 'PA46' };}
-
-  else if (model.substr(0,4)==='PA18') {return { match : true, mfg : 'Piper', type : 'PA18' };}
-  else if (model.substr(0,4)==='PA24') {return { match : true, mfg : 'Piper', type : 'PA24' };}
-  else if (model.substr(0,4)==='PA28') {return { match : true, mfg : 'Piper', type : 'PA28' };}
-  else if (model.substr(0,4)==='PA31') {return { match : true, mfg : 'Piper', type : 'PA31' };}
-  else if (model.substr(0,4)==='PA32') {return { match : true, mfg : 'Piper', type : 'PA32' };}
-  else if (model.substr(0,4)==='PA46') {return { match : true, mfg : 'Piper', type : 'PA46' };}
+  else if (model.substr(0,4)==='PA18') {return { match : true, mfg : 'Piper', type : 'PA18', model:model};}
+  else if (model.substr(0,4)==='PA24') {return { match : true, mfg : 'Piper', type : 'PA24', model:model};}
+  else if (model.substr(0,4)==='PA28') {return { match : true, mfg : 'Piper', type : 'PA28', model:model};}
+  else if (model.substr(0,4)==='PA31') {return { match : true, mfg : 'Piper', type : 'PA31', model:model};}
+  else if (model.substr(0,4)==='PA32') {return { match : true, mfg : 'Piper', type : 'PA32', model:model};}
+  else if (model.substr(0,4)==='PA46') {return { match : true, mfg : 'Piper', type : 'PA46', model:model};}
 
   //Match Diamond
-  else if (model.substr(0,4)==='DA20') {return { match : true, mfg : 'Diamond', type : 'DA20' };}
-  else if (model.substr(0,4)==='DA40') {return { match : true, mfg : 'Diamond', type : 'DA40' };}
+  else if (model.substr(0,4)==='DA20') {return { match : true, mfg : 'Diamond', type : 'DA20', model:model };}
+  else if (model.substr(0,4)==='DA40') {return { match : true, mfg : 'Diamond', type : 'DA40', model:model};}
 
   //Match Mooney
-  else if (model.substr(0,3)==='M20') {return { match : true, mfg : 'Mooney', type : 'M20' };}
+  else if (model.substr(0,3)==='M20') {return { match : true, mfg : 'Mooney', type : 'M20', model:model};}
 
   //Match Socata
-  else if (model.substr(0,3)==='TBM') {return { match : true, mfg : 'Socata', type : 'TBM' };}
+  else if (model.substr(0,3)==='TBM') {return { match : true, mfg : 'Socata', type : 'TBM', model:model};}
 
   //Match Beech
-  else if (model.substr(1,2)==='35') {return { match : true, mfg : 'Beech', type : '35' };}
-  else if (model.substr(0,2)==='35') {return { match : true, mfg : 'Beech', type : '35' };}
-  else if (model.substr(1,2)==='36') {return { match : true, mfg : 'Beech', type : '36' };}
-  else if (model.substr(0,2)==='36') {return { match : true, mfg : 'Beech', type : '36' };}
+  else if (model.substr(1,2)==='35') {return { match : true, mfg : 'Beech', type : '35', model:model};}
+  else if (model.substr(0,2)==='35') {return { match : true, mfg : 'Beech', type : '35', model:model};}
+  else if (model.substr(1,2)==='36') {return { match : true, mfg : 'Beech', type : '36', model:model};}
+  else if (model.substr(0,2)==='36') {return { match : true, mfg : 'Beech', type : '36', model:model};}
 
   //else no match
-  else return { match : false, mfg : '', type : '' };
+  else return { match : false, mfg : '', type : '', model:model};
 }
 
 function refresh(context){

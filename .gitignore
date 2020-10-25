@@ -24,3 +24,5 @@
 
 .idea/*
 .env
+/config/deploy.js
+/config/environment.js

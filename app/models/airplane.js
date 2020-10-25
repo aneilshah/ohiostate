@@ -26,11 +26,16 @@ export default DS.Model.extend({
   dateAddedSort: computed('dateAdded', function() {
     return dayValue(this.get('dateAdded'));
   }),
+  gap: computed('firstSeen', 'lastSeen', function() {
+    return parseInt(this.get('lastSeen'))-parseInt(this.get('firstSeen'));
+  }),
+  fileName: computed('manufacturer', 'model', 'ident', function() {
+    return this.get('manufacturer')+' '+this.get('model')+' '+this.get('ident');
+  }),
   yearCount: computed('allYears', function() {
     let allYears =this.get('allYears');
     return allYears.split("|").length;
   }),
-
 });
 
 function dayValue(date){

@@ -207,6 +207,7 @@ Total Count: {{sorted.count}}&emsp;
       <th {{action 'sort' "firstSeen"}}>First</th>
       <th {{action 'sort' "lastSeen"}}>Last</th>
       <th {{action 'sort' "yearCount"}}>#Yrs</th>
+      <th {{action 'sort' "gap"}}>Gap</th>
       <th {{action 'sort' "color"}}>Color</th>
       <th {{action 'sort' "photo"}}>NP</th>
       <th>Reg</th>
@@ -224,7 +225,8 @@ Total Count: {{sorted.count}}&emsp;
         <td {{action 'editDlg' "class" data}}>{{data.class}}</td>
         <td oncontextmenu={{action "identToClip" data.ident}} {{action 'editDlg' "ident" data}}>{{data.ident}}</td>
         <td>
-          <button {{action 'copyToClip' data}}>Copy</button>
+          {{#copy-button clipboardText=data.fileName title='Copy Ident'}}Copy{{/copy-button}}
+          {{!--<button {{action 'copyToClip' data}}>Copy</button> --}}
         </td>
         <td {{action 'editDlg' "manufacturer" data}}>{{data.manufacturer}}</td>
         <td {{action 'editDlg' "type" data}}>{{data.type}}</td>
@@ -235,7 +237,8 @@ Total Count: {{sorted.count}}&emsp;
         <td {{action 'editDlg' "registered" data}}>{{data.registered}}</td>
         <td {{action 'editDlg' "firstSeen" data}}>{{data.firstSeen}}</td>
         <td {{action 'editDlg' "lastSeen" data}}>{{data.lastSeen}}</td>
-        <td {{action 'editDlg' "yearCount" data}}>{{data.yearCount}}</td>
+        <td>{{data.yearCount}}</td>
+        <td>{{data.gap}}</td>
         <td {{action 'editDlg' "color" data}}>{{data.color}}</td>
         <td {{action 'togglePhoto' data}}>{{data.photo}}</td>
         <td><button {{action 'openWindow' data.ident}}>Reg</button></td>
