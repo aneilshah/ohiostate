@@ -91,8 +91,9 @@ export default Controller.extend({
       window.open('http://www.espn.com/nfl/player/stats/_/id/'+this.get('model.espnid'));
     },
     nflpage(){
+      //https://www.nfl.com/players/justin-fields/
       //http://www.nfl.com/player/joeybosa/2555249/profile
-      window.open('http://www.nfl.com/player/'+this.get('model.nflid')+'/profile');
+      window.open('http://www.nfl.com/players/'+this.get('model.nflid')+'/stats/career');
     },
     cbspage(){
       //http://www.cbssports.com/fantasy/football/players/2060764/joey-bosa/

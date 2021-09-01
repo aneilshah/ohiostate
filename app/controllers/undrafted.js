@@ -1,5 +1,6 @@
 import { computed } from '@ember/object';
 import Controller from '@ember/controller';
+import {thisYear} from "../utils/functions";
 
 export default Controller.extend({
     allowDelete: false,
@@ -169,7 +170,7 @@ export default Controller.extend({
                 firstname: firstname,
                 lastname: lastname,
                 position: position,
-                rookieyear: '2020',
+                rookieyear: thisYear(),
                 status: '',
                 comment: ''
             });

@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import {thisYear} from "../utils/functions";
 
 export default Controller.extend({
     draftRound: Object.freeze([1,2,3,4,5,6,7,8,9,'UFA']),
@@ -68,7 +69,7 @@ export default Controller.extend({
                 status: status,
                 draftpos: '>50',
                 draftround: round,
-                draftyear: 2021,
+                draftyear: thisYear(),
                 espnid: '',
                 nflid: '',
                 cbsid: '',
@@ -77,7 +78,7 @@ export default Controller.extend({
                 earnings: 0,
                 salary: 0,
                 salarydb: '',
-                rookieyear: 2021,
+                rookieyear: thisYear(),
                 lastgame: 2099,
                 team:team,
                 gamesStarted: 0,

@@ -1,4 +1,4 @@
-export {properCase};
+export {properCase, thisYear};
 
 
 function properCase(str){
@@ -17,3 +17,7 @@ function properCase(str){
   return str.join(' ');
 }
 
+function thisYear(){
+  var d = new Date();
+  return d.getFullYear();
+}

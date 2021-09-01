@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import {thisYear} from "../utils/functions";
 
 export default DS.Model.extend({
   firstname: DS.attr(),
@@ -61,7 +62,7 @@ export default DS.Model.extend({
   years: computed('status','draftyear', 'lastgame', function() {
     if (this.get('status')==='CFL' || this.get('status')==='XFL' || this.get('status')==='PRACTICE SQUAD') {return 0;}
     else if (this.get('status')==='ACTIVE' || this.get('status')==='IR' || this.get('status')==='FREE AGENT') {
-      return 2021 - parseInt(this.get('draftyear'))+1;
+      return thisYear() - parseInt(this.get('draftyear'))+1;
     }
     else {return parseInt(this.get('lastgame'))-parseInt(this.get('draftyear'))+1;}
   }),

@@ -1,13 +1,15 @@
 import { computed } from '@ember/object';
 import Controller from '@ember/controller';
 import { later } from '@ember/runloop';
+import {thisYear} from "../utils/functions";
 
 export default Controller.extend({
     allowDelete: false,
     isAdmin: false,
     dateMin: 1900,
-    dateMax: 2022,
+    dateMax: thisYear(),
     refresh: false,
+    thisYear: thisYear(),
     //---------------------------------------------
     // Properties for Dialog Editing
     showDlg: 'NONE',
@@ -153,8 +155,8 @@ export default Controller.extend({
             this.set('statusFilter',status);
         },
         viewAllDates(){
-            this.set('dateMin','1900');
-            this.set('dateMax','2020');
+            this.set('dateMin',1900);
+            this.set('dateMax',thisYear());
         },
         rev(){
             this.toggleProperty('reverse');

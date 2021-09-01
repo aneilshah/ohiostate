@@ -207,7 +207,7 @@
       <th>Delete</th>
     {{/if}}
   </tr>
-
+{{thisYear}}
   {{#each filtered.list as |data index|}}
     {{#if (and (gte data.draftyear dateMin) (lte data.draftyear dateMax))}}
       <tr>
