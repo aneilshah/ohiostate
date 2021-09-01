@@ -1,0 +1,143 @@
+{{outlet}}
+
+<h1>Practice Squad Players&emsp;<button {{action 'addNew'}}>New</button>&emsp;
+    {{#paper-select
+            label='Status' selected=statusFilter onChange=(action (mut statusFilter))
+            options=statuses as |item|
+    }}
+        {{item}}
+    {{/paper-select}}
+</h1>
+{{#if isAdmin}}
+    Admin Functions:
+    <button {{action 'toggleDelete'}}>{{if allowDelete 'Disable Delete' 'Allow Delete'}}</button>
+{{/if}}
+
+{{#if (eq showDlg "EDIT")}}
+    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+
+        {{#paper-dialog-content}}
+            <h2 class="md-title">Edit {{title}}</h2>
+            {{#if (eq title 'Comment')}}
+                {{textarea value=dlgData  rows="4" cols='80' onChange=(action (mut dlgData))}}
+            {{/if}}
+            {{#if (not-eq title 'Comment')}}
+                {{paper-input placeholder=title autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+            {{/if}}
+        {{/paper-dialog-content}}
+
+        {{#paper-dialog-actions class="layout-row"}}
+            <span class="flex"></span>
+            {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+            {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
+        {{/paper-dialog-actions}}
+    {{/paper-dialog}}
+{{/if}}
+
+{{#if (eq showDlg "DROPDOWN")}}
+    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+
+        {{#paper-dialog-content}}
+            <h2 class="md-title">Edit {{title}}</h2>
+            {{#paper-select
+                    label=title selected=dlgData onChange=(action (mut dlgData))
+                    options=dlgDropdown as |item|
+            }}
+                {{item}}
+            {{/paper-select}}
+        {{/paper-dialog-content}}
+
+        {{#paper-dialog-actions class="layout-row"}}
+            <span class="flex"></span>
+            {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+            {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
+        {{/paper-dialog-actions}}
+    {{/paper-dialog}}
+{{/if}}
+
+{{#if (eq showDlg "NEW")}}
+    {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+        <h2 class="md-title">Add New Ohio State Practice Player</h2>
+        {{#paper-dialog-content}}
+            {{#paper-input label="First Name" value=dlgFirstname onChange=(action (mut dlgFirstname))}}{{/paper-input}}
+            {{#paper-input label="Last Name" value=dlgLastname onChange=(action (mut dlgLastname))}}{{/paper-input}}<br>
+            {{#paper-select label="Position" selected=dlgPosition onChange=(action (mut dlgPosition))
+                options=positionList as |item|
+            }}
+                {{item}}
+            {{/paper-select}}
+        {{/paper-dialog-content}}
+
+        {{#paper-dialog-actions class="layout-row"}}
+            <span class="flex"></span>
+            {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+            {{#paper-button primary=true onClick=(action "saveNewPlayer")}}Save{{/paper-button}}
+        {{/paper-dialog-actions}}
+    {{/paper-dialog}}
+{{/if}}
+
+<table>
+    <tr>
+        <td>
+            Position Filter: <b>{{posFilter}}</b></td>
+        <td>
+
+            <button {{action 'viewPos' 'ALL'}}>View All Positions</button>
+            <button {{action 'viewPos' 'QB'}}>QB</button>
+            <button {{action 'viewPos' 'RB'}}>RB</button>
+            <button {{action 'viewPos' 'FB'}}>FB</button>
+            <button {{action 'viewPos' 'WR'}}>WR</button>
+            <button {{action 'viewPos' 'TE'}}>TE</button>
+            <button {{action 'viewPos' 'OL'}}>OL</button>&emsp;
+            <button {{action 'viewPos' 'DL'}}>DL</button>
+            <button {{action 'viewPos' 'LB'}}>LB</button>
+            <button {{action 'viewPos' 'CB'}}>CB</button>
+            <button {{action 'viewPos' 'S'}}>S</button>&emsp;
+            <button {{action 'viewPos' 'K'}}>K</button>
+            <button {{action 'viewPos' 'P'}}>P</button>
+            <button {{action 'viewPos' 'KR'}}>KR</button>&emsp;
+            <button {{action 'refresh'}}>Refresh Data</button>&emsp;
+            <button {{action 'toggleDelete'}}>Allow Delete</button><br>
+            <br>
+        </td>
+    </tr>
+</table>
+
+<br><br>
+
+<table>
+    <tr>
+        <th>#</th>
+        <th {{action 'sort' 'lasName'}}>Name</th>
+        <th {{action 'sort' 'status'}}>Status</th>
+        <th>News</th>
+        <th {{action 'sort' 'position'}}>Pos</th>
+        <th {{action 'sort' 'rookieYear'}}>Year</th>
+        <th>Comment</th>
+        {{#if allowDelete}}
+            <th>Delete</th>
+        {{/if}}
+    </tr>
+
+    {{#each filtered as |data index|}}
+        <tr>
+            <td>{{addone index}}</td>
+            <td>{{data.firstname}} {{data.lastname}}</td>
+            <td {{action 'editDlg' "status" data}}>{{data.status}}</td>
+            <td><button {{action 'news' data}}>News</button></td>
+            <td {{action 'editDlg' "position" data}}>{{data.position}}</td>
+            <td {{action 'editDlg' "rookieyear" data}}>{{data.rookieyear}}</td>
+            <td {{action 'editDlg' "comment" data}}>{{data.comment}}</td>
+            {{#if allowDelete}}
+                <td><button {{action 'delete' data}}>Del</button></td>
+            {{/if}}
+        </tr>
+    {{else}}
+        ERROR: Can't find any data<br>
+    {{/each}}
+</table>
+<br><br>
+<h2>Team Rosters</h2>
+{{team-rosters}}
+
+<br><br><br><br><br>

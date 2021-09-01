@@ -1,0 +1,218 @@
+{{outlet}}
+<h2> Edit Player data...  {{model.firstname}}&nbsp;{{model.lastname}} ({{model.team}})</h2>
+
+{{#if isAdmin}}
+  Admin Functions: <button {{action 'test'}}>Test</button><br><br>
+{{/if}}
+<button {{action 'back'}}>Back to All Players</button>
+<button {{action 'next'}}>Next</button>
+<button {{action 'prev'}}>Prev</button>
+<button {{action 'espnpage'}}>ESPN Page</button>
+<button {{action 'nflpage'}}>NFL Page</button>
+<button {{action 'cbspage'}}>CBS Page</button>
+<button {{action 'salary'}}>Salary</button>
+<button {{action 'career'}}>Career$</button><br><br>
+
+<br><br>
+
+<table>
+  <tr>
+    <th>Item</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Playing Status</td>
+    <td>
+      {{#paper-select
+        label="status"
+        selected=model.status
+        onChange=(action 'save_data' "status")
+        options=statusList
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="position"
+        selected=model.position
+        onChange=(action 'save_data' "position")
+        options=positionList
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="rating"
+        selected=model.rating
+        onChange=(action 'save_data' "rating")
+        options=ratings
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="team"
+        selected=model.team
+        onChange=(action 'save_data' "team")
+        options=teamList
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+    </td>
+  </tr>
+  <tr>
+    <td>Position Stats 1:</td>
+    <td>
+      {{#if (eq model.position 'RB')}}
+        Rush Yards(S)&nbsp;{{textarea value=model.rushSeason rows="1" cols='5' key-up=(action 'save_data' "rushSeason")}}
+        &emsp;
+        Rush Yards(C)&nbsp;{{textarea value=model.rushCareer rows="1" cols='5' key-up=(action 'save_data' "rushCareer")}}
+        &emsp;
+      {{/if}}
+      {{#if (eq model.position 'FB')}}
+        Rush Yards(S)&nbsp;{{textarea value=model.rushSeason rows="1" cols='5' key-up=(action 'save_data' "rushSeason")}}
+        &emsp;
+        Rush Yards(C)&nbsp;{{textarea value=model.rushCareer rows="1" cols='5' key-up=(action 'save_data' "rushCareer")}}
+        &emsp;
+      {{/if}}
+      {{#if (eq model.position 'WR')}}
+        Rcv Yards(S)&nbsp;{{textarea value=model.rcvSeason rows="1" cols='5' key-up=(action 'save_data' "rcvSeason")}}
+        &emsp;
+        Rcv Yards(C) {{textarea value=model.rcvCareer rows="1" cols='5' key-up=(action 'save_data' "rcvCareer")}}
+      {{/if}}
+      {{#if (eq model.position 'TE')}}
+        Rcv Yards(S)&nbsp;{{textarea value=model.rcvSeason rows="1" cols='5' key-up=(action 'save_data' "rcvSeason")}}
+        &emsp;
+        Rcv Yards(C) {{textarea value=model.rcvCareer rows="1" cols='5' key-up=(action 'save_data' "rcvCareer")}}
+      {{/if}}
+      {{#if (eq model.position 'QB')}}
+        Int(S)&nbsp;{{textarea value=model.intSeason rows="1" cols='5' key-up=(action 'save_data' "intSeason")}}
+        &emsp;
+        Int(C) {{textarea value=model.intCareer rows="1" cols='5' key-up=(action 'save_data' "intCareer")}}
+        &emsp;
+        Pass Yards(S)&nbsp;{{textarea value=model.passSeason rows="1" cols='5' key-up=(action 'save_data' "passSeason")}}
+        &emsp;
+        Pass Yards(C) {{textarea value=model.passCareer rows="1" cols='5' key-up=(action 'save_data' "passCareer")}}
+        &emsp;
+      {{/if}}
+      {{#if model.defense}}
+        Sacks(S)&nbsp;{{textarea value=model.sackSeason rows="1" cols='5' key-up=(action 'save_data' "sackSeason")}}
+        &emsp;
+        Sacks(C)&nbsp;{{textarea value=model.sackCareer rows="1" cols='5' key-up=(action 'save_data' "sackCareer")}}
+        &emsp;
+        Tckl(S)&nbsp;{{textarea value=model.tackleSeason rows="1" cols='5' key-up=(action 'save_data' "tackleSeason")}}
+        &emsp;
+        Tckl(C)&nbsp;{{textarea value=model.tackleCareer rows="1" cols='5' key-up=(action 'save_data' "tackleCareer")}}
+      {{/if}}
+
+    </td>
+  </tr>
+  <tr>
+    <td>Position Stats 2:</td>
+    <td>
+      {{#if model.defense}}
+        FF(C) {{textarea value=model.ffCareer rows="1" cols='5' key-up=(action 'save_data' "ffCareer")}}
+        &emsp;
+        INT(C) {{textarea value=model.intCareer rows="1" cols='5' key-up=(action 'save_data' "intCareer")}}
+        &emsp;
+        PB(C) {{textarea value=model.pbCareer rows="1" cols='5' key-up=(action 'save_data' "pbCareer")}}
+      {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <td>General Stats:</td>
+    <td>
+      TD Season&nbsp;{{textarea value=model.tdSeason rows="1" cols='5' key-up=(action 'save_data' "tdSeason")}}
+      &emsp;
+      TD Career&nbsp;{{textarea value=model.tdCareer rows="1" cols='5' key-up=(action 'save_data' "tdCareer")}}
+      &emsp;
+      Games Played&nbsp;{{textarea type="number" value=model.gamesPlayed rows='1' cols="5" key-up=(action 'save_data' "gamesPlayed")}}
+      &emsp;
+      Games Started&nbsp;{{textarea type="number" value=model.gamesStarted rows="1" cols='5' key-up=(action 'save_data' "gamesStarted")}}
+      &emsp;
+    </td>
+  </tr>
+
+  <tr>
+    <td>Comment:</td>
+    <td>
+      {{textarea value=model.comment rows="4" cols='100' key-up=(action 'save_data' "comment")}}
+    </td>
+  </tr>
+  <tr>
+    <td>Draft:</td>
+    <td>
+      {{#paper-select
+        getItems=onUserLoad
+        label="Draft Year"
+        selected=model.draftyear
+        onChange=(action 'save_data' "draftyear")
+        options=draftYear
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        getItems=onUserLoad
+        label="Draft Round"
+        selected=model.draftround
+        onChange=(action 'save_data' "draftround")
+        options=draftRound
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="Draft Position"
+        selected=model.draftpos
+        onChange=(action 'save_data' "draftpos")
+        options=draftPos
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="Last Game"
+        selected=model.lastgame
+        onChange=(action 'save_data' "lastgame")
+        options=draftYear
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+
+    </td>
+  </tr>
+  <tr>
+    <td>Earnings Data:</td>
+    <td>
+      Current Salary&nbsp;{{textarea value=model.salary rows="1" cols='15' key-up=(action 'save_data' "salary")}}
+      &emsp;&emsp;
+      Career Earnings&nbsp;{{textarea value=model.earnings rows="1" cols='15' key-up=(action 'save_data' "earnings")}}
+      &emsp;&emsp;
+      Database&nbsp;{{textarea value=model.salarydb rows="1" cols='40' key-up=(action 'save_data' "salarydb")}}
+      &emsp;
+    </td>
+  </tr>
+  <tr>
+    <td>Webpage Data:</td>
+    <td>
+      ESPN&nbsp;{{textarea value=model.espnid rows="1" cols='10'}}
+      <button {{action 'save_data' model.espnid "espnid"}}>Save</button>
+      &emsp;
+      NFL&nbsp;{{textarea value=model.nflid rows="1" cols='30'}}
+      <button {{action 'save_data' model.nflid "nflid"}}>Save</button>
+      &emsp;
+      CBS&nbsp;{{textarea value=model.cbsid rows="1" cols='30'}}
+      <button {{action 'save_data' model.cbsid "cbsid"}}>Save</button>
+    </td>
+  </tr>
+</table>
+<br><br><br><br><br><br><br><br>

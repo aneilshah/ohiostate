@@ -4,19 +4,26 @@
     {{#paper-button iconButton=true onClick=(action "menu")}}
       {{paper-icon "menu"}}
     {{/paper-button}}
-    <h1>Airplane Database (c)2020 Shahman Ver 0.13 Oct 18</h1>
+
+    <h1>Ohio State Database (c)2020 Shahman Ver 1.02 Sept 13</h1>
     <span class="flex"></span>
-    {{#paper-button raised=true onClick=(action 'goto' "airport")}}
-        Airports
+    {{#paper-button raised=true onClick=(action 'gotoPage' 'players')}}
+      View Players
     {{/paper-button}}
-    {{#paper-button raised=true onClick=(action 'goto' "airplanes")}}
-        My Airplanes
+    {{#paper-button raised=true onClick=(action 'gotoPage' 'psplayers')}}
+      Practice Squad
     {{/paper-button}}
-    {{#paper-button raised=true onClick=(action 'goto' "michairplanes")}}
-        Michigan Airplanes
+    {{#paper-button raised=true onClick=(action 'gotoPage' 'undrafted')}}
+      Undrafted
     {{/paper-button}}
-    {{#paper-button raised=true onClick=(action 'goto' "check-sightings")}}
-       Check Airplanes
+    {{#paper-button raised=true onClick=(action 'gotoPage' 'rosters')}}
+      Team Rosters
+    {{/paper-button}}
+    {{#paper-button raised=true onClick=(action "active")}}
+      Active by Team
+    {{/paper-button}}
+    {{#paper-button raised=true onClick=(action "addPlayer")}}
+      Add New Player
     {{/paper-button}}
     {{#paper-button iconButton=true onClick=(action "favorite")}}
       {{paper-icon "favorite"}}

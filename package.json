@@ -1,8 +1,8 @@
 {
-  "name": "airplanes",
+  "name": "osu",
   "version": "0.0.0",
   "private": true,
-  "description": "Small description for airplanes goes here",
+  "description": "OSU Players Database",
   "license": "MIT",
   "author": "",
   "directories": {

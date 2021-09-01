@@ -1,0 +1,43 @@
+<h4>Add New Ohio State Player</h4>
+
+<button {{action 'create_new' firstname lastname position team rating status}}>Save New Player</button>
+<button {{action 'clear'}}>Clear Data</button>
+<button {{action 'back'}}>Back to All Players</button><br>
+
+{{paper-input label="First Name" value=firstname onChange=(action (mut firstname))}}&emsp;
+{{paper-input label="Last Name" value=lastname onChange=(action (mut lastname))}}&emsp;
+
+{{#paper-select label="Position" selected=position onChange=(action (mut position))
+                options=positionList as |item|
+}}
+    {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select label="Team" selected=team onChange=(action (mut team))
+                options=teamList as |item|
+}}
+    {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select label="Round" selected=round onChange=(action (mut round))
+                options=draftRound as |item|
+}}
+  {{item}}
+{{/paper-select}}
+&emsp;
+{{#paper-select label="Rating" selected=rating onChange=(action (mut rating))
+                options=ratingList as |item|
+}}
+    {{item}}
+{{/paper-select}}&emsp;
+{{#paper-select label="Status" selected=status onChange=(action (mut status))
+                options=statusList as |item|
+}}
+  {{item}}
+{{/paper-select}}<br>
+<br>
+
+
+<button {{action 'create_new' firstname lastname position team rating round status}}>Save New Player</button>
+<br><br><br><br>
+

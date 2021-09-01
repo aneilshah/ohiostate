@@ -1,0 +1,264 @@
+{{outlet}}
+{{#if isAdmin}}
+  Admin Functions:
+  <button {{action 'toggleDelete'}}>{{if allowDelete 'Disable Delete' 'Allow Delete'}}</button>
+  <button {{action 'test'}}>Test</button>
+  <button {{action 'init'}}>Init</button>
+  <button {{action 'import'}}>Import Data</button> <br>
+{{/if}}
+<button {{action 'addNew'}}>Add New Player</button>
+<button {{action 'refresh'}}>Refresh</button><br>
+
+{{#if (eq showDlg "EDIT")}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+
+    {{#paper-dialog-content}}
+      <h2 class="md-title">Edit {{title}}</h2>
+      {{#if (eq title 'Comment')}}
+        {{textarea value=dlgData  rows="4" cols='80' onChange=(action (mut dlgData))}}
+      {{/if}}
+      {{#if (not-eq title 'Comment')}}
+        {{paper-input placeholder=title autofocus=true value=dlgData onChange=(action (mut dlgData))}}
+      {{/if}}
+    {{/paper-dialog-content}}
+
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
+  {{/paper-dialog}}
+{{/if}}
+
+{{#if (eq showDlg "DROPDOWN")}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+
+    {{#paper-dialog-content}}
+      <h2 class="md-title">Edit {{title}}</h2>
+      {{#paper-select
+        label=title value=dlgData onChange=(action (mut dlgData))
+        options=dlgDropdown as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+    {{/paper-dialog-content}}
+
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "saveDlgData")}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
+  {{/paper-dialog}}
+{{/if}}
+
+{{#if (eq showDlg "NEW")}}
+  {{#paper-dialog fullscreen=fullscreen onClose=(action "closeDlg") origin=dialogOrigin}}
+    <h2 class="md-title">Add New Ohio State Player</h2>
+    {{#paper-dialog-content}}
+      {{#paper-input placeholder="First Name" value=dlgFirstname onChange=(action (mut dlgFirstname))}}{{/paper-input}}
+      {{#paper-input placeholder="Last Name" value=dlgLastname onChange=(action (mut dlgLastname))}}{{/paper-input}}<br>
+      <div>
+        {{#paper-checkbox value=dlgActive onChange=(action (mut dlgActive))}}Active{{/paper-checkbox}}
+      </div>
+      {{#paper-select label="Position" selected=dlgPosition onChange=(action (mut dlgPosition))
+                      options=positionList as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+    {{/paper-dialog-content}}
+
+    {{#paper-dialog-actions class="layout-row"}}
+      <span class="flex"></span>
+      {{#paper-button primary=true onClick=(action "closeDlg")}}Cancel{{/paper-button}}
+      {{#paper-button primary=true onClick=(action "saveNewPlayer")}}Save{{/paper-button}}
+    {{/paper-dialog-actions}}
+  {{/paper-dialog}}
+{{/if}}
+
+<table>
+  <tr>
+    <td>
+      Position Filter: <b>{{posFilter}}</b></td>
+    <td>
+
+      <button {{action 'viewPos' 'ALL'}}>View All Positions</button>
+      <button {{action 'viewPos' 'QB'}}>QB</button>
+      <button {{action 'viewPos' 'RB'}}>RB</button>
+      <button {{action 'viewPos' 'FB'}}>FB</button>
+      <button {{action 'viewPos' 'WR'}}>WR</button>
+      <button {{action 'viewPos' 'TE'}}>TE</button>
+      <button {{action 'viewPos' 'OL'}}>OL</button>&emsp;
+      <button {{action 'viewPos' 'DL'}}>DL</button>
+      <button {{action 'viewPos' 'LB'}}>LB</button>
+      <button {{action 'viewPos' 'CB'}}>CB</button>
+      <button {{action 'viewPos' 'S'}}>S</button>&emsp;
+      <button {{action 'viewPos' 'K'}}>K</button>
+      <button {{action 'viewPos' 'P'}}>P</button>
+      <button {{action 'viewPos' 'KR'}}>KR</button>
+      <br>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Filters:
+    </td>
+    <td>
+      {{#paper-select
+        label="Status" selected=statusFilter onChange=(action (mut statusFilter))
+        options=statuses as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+     {{#paper-select
+        label="Off/Def" selected=typeFilter onChange=(action (mut typeFilter))
+        options=type as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="Injury" selected=injFilter onChange=(action (mut injFilter))
+        options=injs as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="Rating" selected=ratingFilter onChange=(action (mut ratingFilter))
+        options=rating as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="Draft" selected=draftFilter onChange=(action (mut draftFilter))
+        options=drafts as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+        label="Sort By" selected=sortBy onChange=(action (mut sortBy))
+        options=sort as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      <button {{action 'rev'}}>{{if reverse 'Sort Z-A' 'Sort A-Z'}}</button>
+      &emsp;
+      {{#paper-select
+        label="View" selected=playerview onChange=(action (mut playerview)) options=views as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Other Filter: {{dateMin}}.{{dateMax}}
+    </td>
+    <td>
+      <button {{action 'viewAllDates'}}>View All Dates</button>
+      <button {{action 'sortRB'}}>Best RB</button>
+      <button {{action 'sortWR'}}>Best WR</button>
+      <button {{action 'sortLB'}}>Best LB</button>
+      <button {{action 'sortDL'}}>Best DL</button>
+      <button {{action 'sortCB'}}>Best CB</button>
+      <button {{action 'sortSF'}}>Best S</button>
+      <button {{action 'sortQB'}}>Best QB</button>
+      <button {{action 'sortTE'}}>Best TE</button>
+      <button {{action 'sortOL'}}>Best OL</button>
+    </td>
+  </tr>
+</table>
+
+<br><br>
+<table>
+  <tr>
+    <th style="width:2%">#</th>
+    <th style="width:10%"{{action 'sort' "lastname"}}>Name [{{filtered.count}}]</th>
+    <th style="width:3%"{{action 'sort' "position"}}>Pos</th>
+    <th style="width:5%"{{action 'sort' "team"}}>Team</th>
+    {{#if (eq playerview 'INFO')}}
+      <th style="width:5%"{{action 'sort' "rating"}}>Rating</th>
+      <th style="width:2%" {{action 'sort' "years"}}>Exp</th>
+      <th style="width:4%" {{action 'sort' "draftyear"}}>Draft</th>
+      <th style="width:3%" {{action 'sort' "draftround"}}>Rnd</th>
+      <th style="width:3%" {{action 'sort' "status"}}>Status</th>
+    {{else if (eq playerview 'STATS')}}
+      <th style="width:5%" {{action 'sort' "rating"}}>Rating</th>
+      <th style="width:3%" {{action 'sort' "gamesPlayed"}}>GP</th>
+      <th style="width:3%" {{action 'sort' "gamesStarted"}}>GS</th>
+      <th style="width:3%" {{action 'sort' "tdCareer"}}>TD</th>
+      <th style="width:3%" {{action 'sort' "yards"}}>Yds</th>
+      <th style="width:3%" {{action 'sort' "tackleCareer"}}>Tck</th>
+      <th style="width:3%" {{action 'sort' "sackCareer"}}>Sack</th>
+      <th style="width:3%" {{action 'sort' "intCareer"}}>Int</th>
+    {{else if (eq playerview 'EARNINGS')}}
+      <th style="width:3%" {{action 'sort' "years"}}>Years</th>
+      <th style="width:7%" {{action 'sort' "salary"}}>Avg Salary</th>
+      <th style="width:7%" {{action 'sort' "earnings"}}>Career Earnings</th>
+    {{/if}}
+
+    <th style="width:7%">Player Page</th>
+    <th style="width:30%">Comment</th>
+    {{#if showDelete}}
+      <th>Delete</th>
+    {{/if}}
+  </tr>
+
+  {{#each filtered.list as |data index|}}
+    {{#if (and (gte data.draftyear dateMin) (lte data.draftyear dateMax))}}
+      <tr>
+        <td>{{addone index}}</td>
+        <td>{{#link-to 'edit-player' data}}
+            {{data.firstname}} {{data.lastname}}{{#if (eq data.status 'ACTIVE')}}*{{/if}}
+        {{/link-to}}</td>
+        <td {{action 'editDlg' "position" data}}>{{data.position}}</td>
+        <td>{{data.team}}</td>
+        {{#if (eq playerview 'INFO')}}
+          <td {{action 'editDlg' "rating" data}}>{{data.rating}}</td>
+          <td>{{data.years}}</td>
+          <td>{{data.draftyear}}</td>
+          <td>{{data.draftround}}</td>
+          <td>{{data.status}}</td>
+        {{/if}}
+        {{#if (eq playerview 'STATS')}}
+          <td>{{data.rating}}</td>
+          <td>{{data.gamesPlayed}}</td>
+          <td>{{data.gamesStarted}}</td>
+          <td>{{data.tdCareer}}</td>
+          <td>{{data.yards}}</td>
+          <td>{{data.tackleCareer}}</td>
+          <td>{{data.sackCareer}}</td>
+          <td>{{data.intCareer}}</td>
+        {{/if}}
+        {{#if (eq playerview 'EARNINGS')}}
+          <td>{{data.years}}</td>
+          <td>${{data.salary}}</td>
+          <td>${{data.earnings}}</td>
+          <td><button {{action 'earnings' data.salarydb}}>Earnings</button></td>
+        {{/if}}
+        {{#if (not-eq playerview 'EARNINGS')}}
+          <td>
+            {{!--
+            <button {{action 'espnpage' data.espnid}}>ESPN</button> --}}
+            <button {{action 'nflpage' data.nflid}}>NFL</button>
+            <button {{action 'news' data}}>News</button>
+          </td>
+        {{/if}}
+        <td {{action 'editDlg' "comment" data}}>{{data.comment}}</td>
+        {{#if showDelete}}
+          <td>
+            <button {{action 'delete' data}}>Delete</button>
+          </td>
+        {{/if}}
+      </tr>
+    {{/if}}
+  {{else}}
+    ERROR: Can't find any data<br>
+  {{/each}}
+</table>
+
+<br><br><br><br><br>

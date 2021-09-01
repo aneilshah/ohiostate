@@ -6,25 +6,24 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('airplanes');
-  this.route('airport');
-  this.route('airport-info');
-  this.route('ann-arbor');
-  this.route('brighton');
-  this.route('canton');
-  this.route('check-sightings');
-  this.route('edit-airplane',{path: 'edit-airplane/:id'});
-  this.route('export-airplanes');
-  this.route('import-airplanes');
+  this.route('active-by-team');
+  this.route('add-player');
+  this.route('bowlgames');
+  this.route('coaches');
+  this.route('drafts');
+  this.route('edit-player',{path: 'edit-player/:id'});
+  this.route('greats');
+  this.route('import');
   this.route('index',{'path': '/'});
-  this.route('jackson');
-  this.route('michairplanes');
-  this.route('navaids');
-  this.route('new');
-  this.route('oaklandsw');
-  this.route('oakland');
-  this.route('troy');
-  this.route('willow');
+  this.route('navigate');
+  this.route('ncaalinks');
+  this.route('nfllinks');
+  this.route('players');
+  this.route('psplayers');
+  this.route('rosters');
+  this.route('stats');
+  this.route('timeline');
+  this.route('undrafted');
 });
 
 export default Router;

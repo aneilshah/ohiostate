@@ -6,32 +6,23 @@ export default Controller.extend({
   isAdmin: false,
   user: "<logged out>",
   actions: {
-    menu(){
-      this.transitionToRoute('airplanes');
+    menu() {
+      this.transitionToRoute('navigate');
     },
-    login(){
-      this.transitionToRoute('airplanes');
+    active() {
+      this.transitionToRoute('active-by-team');
     },
-    new(){
-      this.transitionToRoute('new-airplane');
+    addPlayer() {
+      this.transitionToRoute('add-player');
     },
-    airplanes(){
-      this.transitionToRoute('airplanes');
+    gotoPage(page) {
+      this.transitionToRoute(page);
     },
-     goto(link){
-        this.transitionToRoute(link);
-     },
-    favorite(){
+    favorite() {
       alert("favorite pressed!");
     },
-    more(){
+    more() {
       this.transitionToRoute('players');
     },
-    logout(){
-      this.set('isAuthenticated',false);
-      this.set('isAdmin',false);
-      this.transitionToRoute('login');
-      this.set('user',"<logged out>");
-    }
   }
 });

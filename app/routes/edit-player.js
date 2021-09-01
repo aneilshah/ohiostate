@@ -1,7 +1,8 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  beforeModel() {
-    this.transitionTo("players");
+  model(params) {
+    return this.store.findRecord('player', params.id);
   },
 });
+

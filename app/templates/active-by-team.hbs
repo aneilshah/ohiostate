@@ -1,0 +1,45 @@
+<h1>Active Ohio State Players by Team</h1>
+
+<table>
+  <tr>
+    <th>#</th>
+    <th>Team</th>
+    <th>Name [{{filtered.count}}]</th>
+    <th>Pos</th>
+    <th>Rating</th>
+    <th>Years</th>
+    <th>Rnd</th>
+    <th>Status</th>
+    <th>Player Page</th>
+    <th>Comment</th>
+  </tr>
+
+  {{#each filtered.list as |data index|}}
+    {{#if (eq data.count 1)}}
+      <tr>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+      </tr>
+    {{/if}}
+    <tr>
+      <td>{{data.count}}</td>
+      <td>{{data.team}}</td>
+      <td>{{#link-to 'edit-player' data}}{{data.firstname}} {{data.lastname}}{{#if (eq data.status 'ACTIVE')}}
+        *{{/if}}{{/link-to}}</td>
+      <td>{{data.position}}</td>
+      <td>{{data.rating}}</td>
+      <td>{{data.years}}</td>
+      <td>{{data.draftround}}</td>
+      <td>{{data.status}}</td>
+      <td>
+        <button {{action 'espnpage' data.espnid}}>ESPN</button>
+        <button {{action 'nflpage' data.nflid}}>NFL</button>
+      </td>
+      <td>{{data.comment}}</td>
+    </tr>
+  {{else}}
+    ERROR: Can't find any data<br>
+  {{/each}}
+</table>
+
+<br><br><br><br><br>
+

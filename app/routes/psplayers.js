@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  beforeModel: function() {
-  }
+    model() {
+        return this.store.findAll('psplayer');
+    }
 });
