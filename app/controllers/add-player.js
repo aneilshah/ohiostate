@@ -75,6 +75,7 @@ export default Controller.extend({
                 cbsid: '',
                 position: position,
                 rating:rating,
+                aneilRating: '0-TBD',
                 earnings: 0,
                 salary: 0,
                 salarydb: '',

@@ -54,6 +54,16 @@
       {{/paper-select}}
       &emsp;
       {{#paper-select
+              label="aneil rating"
+              selected=model.aneilRating
+              onChange=(action 'save_data' "aneilRating")
+              options=aneilRatings
+      as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
         label="team"
         selected=model.team
         onChange=(action 'save_data' "team")

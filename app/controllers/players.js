@@ -1,7 +1,7 @@
 import { computed } from '@ember/object';
 import Controller from '@ember/controller';
 import { later } from '@ember/runloop';
-import {nflPage, thisYear} from "../utils/functions";
+import {aneilRatings, nflPage, positions, ratings, thisYear} from "../utils/functions";
 
 export default Controller.extend({
     allowDelete: false,
@@ -26,8 +26,8 @@ export default Controller.extend({
 
     //---------------------------------------------
     // Properties for updating data
-    positionList: Object.freeze(['RB','FB','QB','WR','TE','OL','DE','LB','CB','S','DL','K','P','KR','LS']),
-    ratings: Object.freeze(['5-All Pro', '4-Star', '3-Starter','2-Backup', '1-Bench', '0-DNP']),
+    positionList: positions(),
+    ratings: ratings(),
     //---------------------------------------------
     // Properties for sorts and filters
     posFilter: 'ALL',
@@ -37,6 +37,7 @@ export default Controller.extend({
     injFilter:'ALL',
     actFilter:'ALL',
     ratingFilter:'ALL',
+    aneilFilter: 'ALL',
     draftFilter:'ALL',
     sortBy: 'lastname',
     reverse: false,
@@ -45,10 +46,12 @@ export default Controller.extend({
         'earnings','round','tdCareer','gamesPlayed','yards','tackleCareer']),
     views: Object.freeze(['INFO','STATS','EARNINGS']),
     types: Object.freeze(['ALL','OFF','DEF','ST']),
-    rating: Object.freeze(['ALL','5','4','3','2','1']),
+    rating: ['ALL'].concat(ratings()),
     statuses: Object.freeze(['ALL','ACTIVE','FREE AGENT','RETIRED','IR','RESERVE','PRACTICE SQUAD','XFL','CFL']),
     drafts: Object.freeze(['ALL','DRAFTED','UNDRAFTED']),
     injs: Object.freeze(['ALL']),
+    aneilRatings: aneilRatings(),
+    aneilRatingList: ['ALL'].concat(aneilRatings()),
 
     //----------------------------------------------
     filtered: computed('refresh', 'posFilter', 'statusFilter', 'typeFilter', 'ratingFilter', 'draftFilter', 'sortBy', 'reverse', function () {
@@ -295,6 +298,11 @@ export default Controller.extend({
                 this.set('title','Rating');
                 this.set('dlgDropdown',this.get('ratings'));
                 this.set('showDlg','DROPDOWN');
+            }
+            else if (val1==='aneilRating') {
+              this.set('title','Aneil Rating');
+              this.set('dlgDropdown',this.get('aneilRatingList'));
+              this.set('showDlg','DROPDOWN');
             }
             this.set('selectedData',val1);
             this.set('selectedRecord',val2);

@@ -125,8 +125,15 @@
       {{/paper-select}}
       &emsp;
       {{#paper-select
-        label="Rating" selected=ratingFilter onChange=(action (mut ratingFilter))
+        label="Highest Level" selected=ratingFilter onChange=(action (mut ratingFilter))
         options=rating as |item|
+      }}
+        {{item}}
+      {{/paper-select}}
+      &emsp;
+      {{#paper-select
+              label="Aneil Rating" selected=aneilFilter onChange=(action (mut aneilFilter))
+              options=aneilRatingList as |item|
       }}
         {{item}}
       {{/paper-select}}
@@ -181,7 +188,8 @@
     <th style="width:3%"{{action 'sort' "position"}}>Pos</th>
     <th style="width:5%"{{action 'sort' "team"}}>Team</th>
     {{#if (eq playerview 'INFO')}}
-      <th style="width:5%"{{action 'sort' "rating"}}>Rating</th>
+      <th style="width:5%"{{action 'sort' "rating"}}>Highest</th>
+      <th style="width:5%"{{action 'sort' "aneilRating"}}>Aneil</th>
       <th style="width:2%" {{action 'sort' "years"}}>Exp</th>
       <th style="width:4%" {{action 'sort' "draftyear"}}>Draft</th>
       <th style="width:3%" {{action 'sort' "draftround"}}>Rnd</th>
@@ -197,8 +205,9 @@
       <th style="width:3%" {{action 'sort' "intCareer"}}>Int</th>
     {{else if (eq playerview 'EARNINGS')}}
       <th style="width:3%" {{action 'sort' "years"}}>Years</th>
-      <th style="width:7%" {{action 'sort' "salary"}}>Avg Salary</th>
-      <th style="width:7%" {{action 'sort' "earnings"}}>Career Earnings</th>
+      <th style="width:7%" {{action 'sort' "lastgame"}}>Last Year</th>
+      <th style="width:7%" {{action 'sort' "earnings"}}>Career Earn</th>
+      <th style="width:7%" {{action 'sort' "avgSalary"}}>Avg Salary</th>
     {{/if}}
 
     <th style="width:7%">Player Page</th>
@@ -218,6 +227,7 @@
         <td>{{data.team}}</td>
         {{#if (eq playerview 'INFO')}}
           <td {{action 'editDlg' "rating" data}}>{{data.rating}}</td>
+          <td {{action 'editDlg' "aneilRating" data}}>{{data.aneilRating}}</td>
           <td>{{data.years}}</td>
           <td>{{data.draftyear}}</td>
           <td>{{data.draftround}}</td>
@@ -235,8 +245,9 @@
         {{/if}}
         {{#if (eq playerview 'EARNINGS')}}
           <td>{{data.years}}</td>
-          <td>${{data.salary}}</td>
+          <td>{{data.lastgame}}</td>
           <td>${{data.earnings}}</td>
+          <td>${{data.avgSalary}}</td>
           <td><button {{action 'earnings' data.salarydb}}>Earnings</button></td>
         {{/if}}
         {{#if (not-eq playerview 'EARNINGS')}}
