@@ -1,11 +1,10 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/controller';
+import {nflPage} from "../utils/functions";
 
 // TODO
-// DEFAULT TO CURRENT YEAR
 // LIST USES CURRENT YEAR
-// EXPERIENCE USES CURRENT YEAR
 
 export default Controller.extend({
   playerCtrl: inject('players'),
@@ -23,7 +22,7 @@ export default Controller.extend({
   teamList: Object.freeze(['Free Agent','Bears','Bengals','Bills','Broncos','Browns','Bucaneers','Cardinals','Chargers','Chiefs','Colts','Cowboys',
     'Dolphins','Eagles','Falcons','Giants','Jaguars','Jets','Lions','Niners','Packers','Panthers','Patriots',
     'Rams','Raiders','Ravens','Redskins','Saints','Seahawks','Steelers','Texans','Titans','Vikings']),
-  statusList: Object.freeze(['ACTIVE','FREE AGENT','IR','PRACTICE SQUAD','RETIRED','XFL','CFL']),
+  statusList: Object.freeze(['ACTIVE','FREE AGENT','IR','RESERVE','PRACTICE SQUAD','RETIRED','XFL','CFL']),
   actions: {
     save_data(val1, val2){
       //alert('val1:'+val1+' val2:'+val2)
@@ -91,9 +90,8 @@ export default Controller.extend({
       window.open('http://www.espn.com/nfl/player/stats/_/id/'+this.get('model.espnid'));
     },
     nflpage(){
-      //https://www.nfl.com/players/justin-fields/
-      //http://www.nfl.com/player/joeybosa/2555249/profile
-      window.open('http://www.nfl.com/players/'+this.get('model.nflid')+'/stats/career');
+      let player = this.get('model.nflid');
+      window.open(nflPage(player));
     },
     cbspage(){
       //http://www.cbssports.com/fantasy/football/players/2060764/joey-bosa/

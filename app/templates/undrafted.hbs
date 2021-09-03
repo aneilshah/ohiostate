@@ -110,6 +110,7 @@
             <th {{action 'sort' 'position'}}>Pos</th>
             <th {{action 'sort' 'status'}}>Highest Status</th>
             <th {{action 'sort' 'rookieyear'}}>Year</th>
+            <th>News</th>
             <th>Comment</th>
         </tr>
 
@@ -120,6 +121,7 @@
                 <td {{action 'editDlg' "position" data}}>{{data.position}}</td>
                 <td {{action 'editDlg' "status" data}}>{{data.status}}</td>
                 <td {{action 'editDlg' "rookieyear" data}}>{{data.rookieyear}}</td>
+                <td><button {{action 'news' data}}>News</button></td>
                 <td {{action 'editDlg' "comment" data}}>{{data.comment}}</td>
             </tr>
         {{else}}

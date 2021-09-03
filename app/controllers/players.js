@@ -1,7 +1,7 @@
 import { computed } from '@ember/object';
 import Controller from '@ember/controller';
 import { later } from '@ember/runloop';
-import {thisYear} from "../utils/functions";
+import {nflPage, thisYear} from "../utils/functions";
 
 export default Controller.extend({
     allowDelete: false,
@@ -46,7 +46,7 @@ export default Controller.extend({
     views: Object.freeze(['INFO','STATS','EARNINGS']),
     types: Object.freeze(['ALL','OFF','DEF','ST']),
     rating: Object.freeze(['ALL','5','4','3','2','1']),
-    statuses: Object.freeze(['ALL','ACTIVE','FREE AGENT','RETIRED','IR','PRACTICE SQUAD','XFL','CFL']),
+    statuses: Object.freeze(['ALL','ACTIVE','FREE AGENT','RETIRED','IR','RESERVE','PRACTICE SQUAD','XFL','CFL']),
     drafts: Object.freeze(['ALL','DRAFTED','UNDRAFTED']),
     injs: Object.freeze(['ALL']),
 
@@ -177,10 +177,8 @@ export default Controller.extend({
             window.open('http://www.google.com/search?q=NFL "'+player.get('firstname')+' '+player.get('lastname')+
             '"&tbm=nws&tbs=qdr:w');
         },
-        nflpage(page){
-            //http://www.nfl.com/player/joeybosa/2555249/profile
-            //window.open('http://www.nfl.com/player/'+page+'/profile');
-          window.open('http://www.nfl.com/players/'+page+'/stats');
+        nflpage(player){
+          window.open(nflPage(player));
         },
         cbspage(page){
             //http://www.cbssports.com/fantasy/football/players/career-stats/2060764/joey-bosa/

@@ -1,4 +1,4 @@
-export {properCase, thisYear};
+export {nflPage, properCase, thisYear};
 
 
 function properCase(str){
@@ -20,4 +20,11 @@ function properCase(str){
 function thisYear(){
   var d = new Date();
   return d.getFullYear();
+}
+
+function nflPage(player){
+  //https://www.nfl.com/players/justin-fields/
+  let domain = 'http://www.nfl.com/players/'
+  let page = '/stats/career';
+  return domain+player+page;
 }

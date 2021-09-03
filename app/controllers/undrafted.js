@@ -77,6 +77,11 @@ export default Controller.extend({
             //record.set('leadindex',newIdx);
             //record.save();
         },
+        news(player){
+          //http://www.nfcom/player/joeybosa/2555249/profile
+          window.open('http://www.google.com/search?q=NFL "'+player.get('firstname')+' '+player.get('lastname')+
+            '"&tbm=nws&tbs=qdr:w');
+        },
         refresh(){
             this.toggleProperty('refresh');
         },
